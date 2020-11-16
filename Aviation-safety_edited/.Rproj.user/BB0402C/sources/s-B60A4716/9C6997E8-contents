@@ -1,0 +1,267 @@
+---
+title: "Aviation Risk Factors"
+output: html_document
+css: table-style.css
+---
+###### Packages used
+```{r, warning=F, message=F}
+pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, gt, tidyverse, glue, formattable, kableExtra, imager, reshape2, gridExtra)
+```
+
+### How much more dangerous is General Aviation than Commerical or Commuter flight?  
+I obtained data from [link](https://www.bts.gov/content/us-general-aviationa-safety-data) the American Bureau of Transportation Statistics (BTS). The BTS have been required by law to investigate and report public use accidents since 1995. Their data is accessible, free and transparent, so I selected it as a reliable source of data. 
+
+**note: General aviation (GA) is defined as non-military and non scheduled flight. GA typically involves smaller aircrafts and often for recreation and private transport.
+
+```{r, echo=FALSE}
+im <- load.image("C:/Users/akfra/Pictures/Cessna-Skyhawk.jpg")
+p1 <- plot(im,bty='n', axes = F) 
+p1
+```
+
+
+
+#### Datasets
+1) U.S. Air Carrier Safety Data: Includes all scheduled and nonscheduled service accidents involving all-cargo carriers and commercial operators of large aircraft when those accidents occurred during 14 CFR 121 operations. 
+2) U.S. General Aviation Safety Data: U.S. registered civil aircraft not operated under 14 CFR 121 or 14 CFR 135. Accidents on foreign soil and in foreign waters are excluded.
+
+
+### Importing data and structuring tables.
+
+##### Evaluate the unmodified data stucture
+```{r, warning = F, message=FALSE}
+comm_url <- "https://www.bts.gov/sites/bts.dot.gov/files/table_02_09_121819.xlsx" 
+filename = (paste((getwd()),"/comm_data_table.xlsx", sep = ""))
+invisible(download.file(url = comm_url, destfile = filename, mode='wb'))
+
+comm_data <- read.xlsx(filename, startRow = 2, colNames = TRUE, rowNames = FALSE) 
+      comm_data <- comm_data[1:22,] ## data ends on row 24. It is followed by paragprahs of annotations
+          comm_data <- as.matrix(comm_data)
+          rn <- comm_data[,1]
+          rownames(comm_data) <- rn
+          comm_data <- comm_data[,2:ncol(comm_data)]
+
+                  comm_transpose <- as.data.frame(t(as.matrix(comm_data)))
+                  comm_transpose$year <- rownames(comm_transpose)
+                  comm_transpose <- comm_transpose[2:nrow(comm_transpose),]
+                  comm_transpose <- comm_transpose[comm_transpose$year >= 2000,]
+                  
+                      df_comm_transpose <- as.data.frame(comm_transpose)
+                      df_comm_transpose_numeric <- data.frame(lapply(df_comm_transpose, function(x) as.numeric(as.character(x)))) # change variables from factors to numeric
+
+comm_fatality_rate <- c(df_comm_transpose_numeric$Total.accidents..fatal.2)
+
+head(df_comm_transpose_numeric)
+
+```
+
+#### Format the table. 
+The above table is not very readable an imported. I am going to re-format using American Psychological Association (APA) format. I needed to use a Cascading Style Sheet file (CSS) to specify the style formats. The CSS file was called on in my rmarkdown script.
+
+I selected the data that corresponds to the nnumber of fatal accidents per 100 thousand hours of flight. Fatality accidents per time is the metric I am interested in, because they more closely corresponds to pilot error, which I am hoping we can have control over and can correct to some extent. Total fatalities on the other hand can be more closely related to number of passengers. A lot of fatalities can occur with very few pilot errors, and there is less room to improve pilot performance. Improvements would likely be seen adjusting other parameters, such as passenger capacity, distance of flight etc.   
+```{r}
+
+colnames(df_comm_transpose_numeric) <- c('Fatalities','Injured persons', 'Accidents', 'Fatal Accidents', 'Aircraft miles(mill)','Rate/mill miles', 'Fatalities','Injured persons', 'Accidents', 'Fatal Accidents','Aircraft Departures','rates 1000', 'Fatalities','Injured persons', 'Accidents','Fatal Accidents', 'Flight hours', 'Rates per 100 hours', 'Fatalities','Injured persons','Accidents', 'Fatal Accidents', 'Year' )
+
+table_function <- function(table, caption, note){kable(table, format = "html",col.names = colnames(table), align = c(rep("c", times = ncol(table))),
+      caption = caption) %>%
+  kable_styling(full_width = TRUE) %>%
+  row_spec(row = 0, align = "c") %>%
+  footnote(general_title = "Note.", general = note,
+           footnote_as_chunk = TRUE)}
+
+table <- df_comm_transpose_numeric[, 19:ncol(df_comm_transpose_numeric)] # these columns are variables that correspond to rates per 100 thousand hours of flight. 
+
+caption <- "Commercial aviation safety statistics. Values per 100 thousand hours of flight"
+
+note <- "These statistics were obtained from the US Beareau of Transportation Statistics"
+
+table_function(table, caption, note)
+
+```
+
+
+#### Display the table for General Aviation
+
+```{r, message = FALSE, warning= FALSE}
+GA_url <- "https://www.bts.gov/sites/bts.dot.gov/files/table_02_14_121819.xlsx" ## downloading commercial accident data from Bureau of Transportation Statistics (US)
+filename = (paste((getwd()),"/GA_data_table.xlsx", sep = ""))
+download.file(url = GA_url, destfile = filename, mode='wb')
+
+GA_data <- read.xlsx(filename, startRow = 2, colNames = TRUE, rowNames = FALSE)
+  GA_data <- GA_data[1:10,]
+    GA_data <- as.matrix(GA_data)
+    rn <- GA_data[,1]
+    rownames(GA_data) <- rn
+    GA_data <- GA_data[,2:ncol(GA_data)]
+
+        GA_transpose <- as.data.frame(t(as.matrix(GA_data)))
+        GA_transpose$year <- rownames(GA_transpose)
+        GA_transpose <- GA_transpose[2:nrow(GA_transpose),]
+        GA_transpose$year <- rownames(GA_transpose)
+        GA_transpose <- GA_transpose[GA_transpose$year >= 2000,]
+
+            df_GA_transpose <- as.data.frame(GA_transpose)
+            df_GA_transpose_numeric <- data.frame(lapply(df_GA_transpose, 
+                  function(x) as.numeric(as.character(x))))  # change variables from factors to numeric
+
+GA_fatality_rate <- c(df_GA_transpose_numeric$Total.accidents..fatala.b) 
+```
+
+```{r}
+df_GA_transpose_numeric <- df_GA_transpose_numeric[,7:11]
+colnames(df_GA_transpose_numeric) <- c('Fatalities','Injured persons','Accidents', 
+                                       'Fatal Accidents', 'Year')
+
+table <- df_GA_transpose_numeric
+
+caption <- "General Aviation safety statistics. Values per 100 thousand hours of flight"
+
+note <- "These statistics were obtained from the US Beareau of Transportation Statistics"
+
+table_function(table, caption, note)
+
+```
+
+
+#### Plot fatality rates of General Aviation against Commercial flight 
+```{r, message=F, warning=F, out.width= "100%", fig.width= 12}
+
+# construct dataframe of fatality rates and year.
+
+Values <- c( comm_fatality_rate, GA_fatality_rate)
+Type <- c(rep("Commercial", times= nrow(comm_transpose)), rep("General Aviation", times = nrow(comm_transpose)))
+Year <- as.numeric(c(rep(comm_transpose$year, times = 2)))
+
+df <- data.frame(Type, Values, Year)
+
+
+mytheme <- theme(plot.title = element_text(family = "Times New Roman", size = (16)), legend.title = element_blank(), 
+                 legend.text = element_text(face = "italic", colour="steelblue4",family = "Times New Roman", size = (12)), 
+                 axis.title = element_text(family = "Times New Roman", size = (13), colour = "steelblue4" ),
+                 axis.text = element_text(family = "Times New Roman", colour = "cornflowerblue", size = (10),
+                 margin = margin(t = 0, r = 0, b = 40, l = 40)))
+
+
+df$Values[df$Type == 'Commercial'] <- df$Values[df$Type == 'Commercial'] * 20 # modifying for double y axis plot. The y scale is divided by 20 in plot.
+
+
+p <- ggplot(df, aes(Year, Values, colour = Type)) + mytheme + geom_point(size = 3) + geom_line() + ylab('Fatal Accident Rate GA') + xlab ('Year') +
+      labs(title = "Fatal Accidents per 100 Thousand Flight Hours(US)")  
+
+p <- p +  scale_x_continuous(breaks = c(2000:2018), labels = c(df$Year[1:19])) + 
+     scale_y_continuous(breaks = seq(0, 1.5, by = 0.25), sec.axis = sec_axis(~./20, name = "Fatality Rate Commerical")) 
+
+p <- p +  scale_colour_manual(values=col_scheme <- c("palegreen3", "cornflowerblue"))  
+
+p <- p + theme(axis.line.y.right = element_line(color = "palegreen3"), axis.ticks.y.right = element_line(color = "palegreen3"),
+               axis.text.y.right = element_text(color = "palegreen3"), axis.title.y.right = element_text(color = "palegreen3"))
+
+p <- p + theme(axis.line.y.left = element_line(color = "cornflowerblue"), axis.ticks.y.left = element_line(color = "cornflowerblue"), 
+               axis.text.y.left = element_text(color = "cornflowerblue"), axis.title.y.left = element_text(color = "cornflowerblue"))
+
+p <- p + guides(colour = guide_legend(reverse = T)) + annotate("text", x = 2008, y = 0.8, label = "Mean GA: 1.2 /n /t Mean Commercial: .008",
+                                                               colour = "steelblue4")
+
+p
+```
+
+
+On average there are 15 times more accidents resulting in a death during GA flight than commercial flight. I am going to revisualize the data to make this difference more intuitive. Notice that I adjusted the scales in previous figure in order to fit both lines in the graph 
+
+
+```{r, message = F, warning=F}
+## create data frame. This will be used as data points in barchart
+
+df <- data.frame(Type, Values, Year)
+
+GA <- df[df$Type == "General Aviation", 2]
+COMM <- df[df$Type == "Commercial", 2]
+  d <- data.frame(GA, COMM)
+  colnames(d)<- c('General Aviation', 'Commercial')
+
+  m.d <- melt(d)  
+
+# create values for error bars and means. place into data frame. This will give the size of barchart and the length of error bars  
+se <- function(x){sd(x)/sqrt(length(x))}
+
+  ses <- c(se((COMM)), se(na.omit(GA)))
+  means <- c(mean((COMM)),mean(na.omit(GA)))
+  Type <- unique(df$Type)
+
+dat_sum <- data.frame(Type, means, ses)
+
+
+
+## format barchart
+ 
+p1 <-  ggplot(dat_sum, aes(y=means,x=Type)) +  geom_bar(stat="identity",width=0.4, colour = c("palegreen3", "blue"), 
+       fill=c("palegreen3", "cornflowerblue")) + scale_fill_manual(values=c("palegreen3", "cornflowerblue")) +
+       geom_errorbar(stat="identity",width=0.2, ymin=means-ses,ymax=means+ses, size = 1.5) + theme_classic() +
+       geom_point(data = m.d, aes(variable, value), position = "jitter") + labs(title = "Yearly Rates per Aviation Type",
+       caption = "*Note: error bars are standard errors") + ylab("Fatality Rate: Fatal Accident / 100,000 Flight Hours") + 
+       theme(axis.text=element_text(size=12), axis.title.x = element_blank())
+ 
+
+## fomart pie chart
+
+p2 <-  ggplot(dat_sum, aes(x="", y=means, fill=Type))+ geom_bar(width = 1, stat = "identity")
+p2 <- p2 + coord_polar(theta = "y") 
+  
+ blank_theme <- theme_minimal()+
+  theme(
+  axis.text = element_blank(),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank(),
+  plot.title=element_text(size=14, face="bold")
+  )
+
+p2 <- p2 + blank_theme
+
+p2 <- p2  + scale_fill_manual(values=c("palegreen3", "cornflowerblue"))
+
+grid.arrange(p1, p2, nrow = 1)
+
+```   
+
+ These charts show just how staggering the difference is in rate of fatality between the two types of aviation. 
+
+ The second thing we can see from the previous line graph is that perhaps fatality rates are improving in recent years for GA. This may be a result of enhance usability design and perhaps the organizing 
+ and automation of instruments lessening pilot workload. 
+
+``` {r, message=F, warning=F, out.width= "100%", fig.width= 12}
+
+
+# construct dataframe of fatality rates and year.
+
+Values <- c( comm_fatality_rate, GA_fatality_rate)
+Type <- c(rep("Commercial", times= nrow(comm_transpose)), rep("General Aviation", times = nrow(comm_transpose)))
+Year <- as.numeric(c(rep(comm_transpose$year, times = 2)))
+
+df <- data.frame(Type, Values, Year)
+df <- df[20:nrow(df),]# just evaluating GA trends
+
+df$seg<- c(rep('b', times = 11), rep('g', times = 8))
+
+
+mytheme <- theme(plot.title = element_text(family = "Times New Roman", size = (16)), legend.title = element_blank(), 
+                 legend.position = "none", legend.text = element_blank(), axis.title = element_text(family = "Times New Roman", size = (13), 
+                  colour = "steelblue4" ), axis.text = element_text(family = "Times New Roman",
+                  colour = "cornflowerblue", size = (10),margin = margin(t = 0, r = 0, b = 40, l = 40)))
+
+
+p <- ggplot(df, aes(Year, Values, fill = seg)) + geom_point(size = 3, colour = "cornflowerblue") + geom_line(colour = "cornflowerblue" ) +
+     ylab('Fatal Accident Rate GA') + xlab ('Year') + labs(title = "Is GA getting safer over time?") + mytheme 
+
+p <- p + geom_smooth(method = lm, se = T, colour = 'black', linetype = "dashed")
+
+p
+```
+
+
+continue with analysis
+
+

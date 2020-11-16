@@ -1,0 +1,73 @@
+ ###################    plot out electrode reduction results
+
+pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, tidyverse, glue, kableExtra, reshape2, gridExtra, pheatmap, jpeg, raster, BiocManager, grDevices, imager, readbitmap)
+
+df <- read.csv('C:/Users/akfra/Desktop/BCI_File_GoodPPts/10_electrodes/reduced_electrodes.csv')
+
+df <- df[1:15,]
+good_ppt_IDXminusOCC <- df[c(1:2,4,6:12, 15), 10]
+df$good_ppt <- c(good_ppt_IDXminusOCC, 'NA', 'NA','NA', 'NA') # can make this cleaner by duplicating index minus occ column and then adding in NAs
+
+df_needed_cols <- df[1:15, c(8, 12, 1, 10, 17, 15)]
+
+
+
+colnames(df_needed_cols) <- c('Participant', '1. All Electrodes', '2. IDX Electrodes',
+                              '3. IDX - Occipital Electrodes', '4. IDX - Occipital Electrodes & BCI Illiterate Participants', '5. Temporal Binning of IDX - Occipital Electrodes & BCI Illiterate Participants' )
+
+
+
+m.df <- melt(df_needed_cols[,2:ncol(df_needed_cols)], id.vars = NULL)
+m.df$value <- as.numeric(m.df$value)
+
+m.df$value <- (1 - m.df$value) *100
+
+colnames(m.df) <- c('Electrodes', 'value')
+ggplot(m.df, aes( Electrodes, value, fill = Electrodes))  + geom_hline(yintercept=50, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + 
+  geom_jitter() + ylab("Classification Rate (%)")  + ggtitle("Classification rates across electrode reduction approaches") + theme(plot.title = element_text(hjust = 0.2)) + 
+  theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) # remove x labels. format. make into CR. 0.5 line. 
+
+
+bins <- df[1:11, c(16, 17,13:15)]
+bins
+
+colnames(bins)<- c('Time as the Output Class', 'Original: Not Accounting for Time', 'First Two Circuits Only', 'Final Two Circuits Only', 'Average of Grouped Circuits')
+m.bins <- melt(bins, id.vars = NULL)
+
+m.bins$value <- as.numeric(m.bins$value)
+m.bins$value <- (1 - m.bins$value) * 100 
+colnames(m.bins) <- c('Temporal_Binning_Approach', 'value')
+
+str(m.bins)
+
+ggplot(m.bins, aes( Temporal_Binning_Approach, value, fill = Temporal_Binning_Approach))  + geom_hline(yintercept=50, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + 
+  geom_jitter() + ylab("Classification Rate (%)")  + ggtitle("Classification rates across temporal binning approaches") + theme(plot.title = element_text(hjust = 0.2)) + 
+  theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + guides(fill=guide_legend(title="Temporal Binning Approach"))
+  
+t.test(df$time, mu=0.5, alternative="less")
+t.test(df$time)
+
+
+aov.df <- data.frame(df$good_ppt[1:11], df$first.half[1:11], df$second.half[1:11])
+m.aov.df <- melt(aov.df, id.var = NULL)
+
+m.aov.df$value <- as.numeric(m.aov.df$value)
+
+res.aov <- aov(value ~ variable, data = m.aov.df)
+# Summary of the analysis
+summary(res.aov)
+TukeyHSD(res.aov)
+
+aov.df$df.good_ppt.1.11.<- as.numeric(aov.df$df.good_ppt.1.11.)
+t.test(aov.df$df.second.half.1.11., aov.df$df.first.half.1.11., alternative = "two.sided", var.equal = FALSE)
+
+t.test(as.numeric(df$binned[1:11]), as.numeric(df$good_ppt), alternative = "two.sided", var.equal = FALSE)
+
+t.test()
+pairwise.t.test(m.aov.df$value, m.aov.df$variable,
+                p.adjust.method = "BH")
+
+
+install.packages("multcomp")
+library(multcomp)
+summary(glht(res.aov, linfct = mcp(group = "Tukey")))

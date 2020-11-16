@@ -1,0 +1,1 @@
+"0","pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, gt, tidyverse, glue, formattable, kableExtra, imager, reshape2, gridExtra)"

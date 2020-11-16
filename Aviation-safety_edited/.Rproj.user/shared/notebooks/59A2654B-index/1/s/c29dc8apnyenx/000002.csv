@@ -1,0 +1,28 @@
+"0","GA_url <- ""https://www.bts.gov/sites/bts.dot.gov/files/table_02_14_121819.xlsx"" ## downloading commercial accident data from Bureau of Transportation Statistics (US)"
+"0","filename = (paste((getwd()),""/GA_data_table.xlsx"", sep = """"))"
+"0","download.file(url = GA_url, destfile = filename, mode='wb')"
+"2","trying URL 'https://www.bts.gov/sites/bts.dot.gov/files/table_02_14_121819.xlsx'
+"
+"2","Content type 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+"2"," length 18512 bytes (18 KB)
+"
+"2","downloaded 18 KB
+
+"
+"0","GA_data <- read.xlsx(filename, startRow = 2, colNames = TRUE, rowNames = FALSE)"
+"0","  GA_data <- GA_data[1:10,]"
+"0","    GA_data <- as.matrix(GA_data)"
+"0","    rn <- GA_data[,1]"
+"0","    rownames(GA_data) <- rn"
+"0","    GA_data <- GA_data[,2:ncol(GA_data)]"
+"0",""
+"0","        GA_transpose <- as.data.frame(t(as.matrix(GA_data)))"
+"0","        GA_transpose$year <- rownames(GA_transpose)"
+"0","        GA_transpose <- GA_transpose[2:nrow(GA_transpose),]"
+"0","        GA_transpose$year <- rownames(GA_transpose)"
+"0","        GA_transpose <- GA_transpose[GA_transpose$year >= 2000,]"
+"0",""
+"0","            df_GA_transpose <- as.data.frame(GA_transpose)"
+"0","            df_GA_transpose_numeric <- data.frame(lapply(df_GA_transpose, function(x) as.numeric(as.character(x)))) # change variables from factors to numeric"
+"0",""
+"0","GA_fatality_rate <- c(df_GA_transpose_numeric$Total.accidents..fatala.b) "

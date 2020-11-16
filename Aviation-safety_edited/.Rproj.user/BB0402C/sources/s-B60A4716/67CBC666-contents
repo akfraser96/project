@@ -1,0 +1,81 @@
+pacman:: p_load(rtweet, reactable, glue, stringr, httpuv, dplyr, tm)
+
+# search_tweet(query, n, include_rts) # only goes back about 6 days
+
+NS_tweets <- search_tweets("Nova Scotia", 10000, include_rts = F)
+
+names(NS_tweets)
+
+wanted_vars <- NS_tweets %>% 
+  dplyr::select(user_id, status_id, created_at, screen_name, text, favorite_count, retweet_count)
+
+
+tweet_table_data <- dplyr::select(wanted_vars, -user_id, -status_id)
+
+
+reactable::reactable(tweet_table_data, 
+                     filterable = T, searchable = T, bordered = T, striped = T, highlight = T,
+                     defaultPageSize = 25, showPageSizeOptions = T, showSortable = T, 
+                     pageSizeOptions = c(25,50,75,100, 200), defaultSortOrder = "desc",
+                     columns = list(
+                       created_at = colDef(defaultSortOrder = "asc"),
+                       screen_name = colDef(defaultSortOrder = "asc"),
+                       text = colDef(html = T, minWidth = 190, resizable = T),
+                       favorite_count = colDef(filterable = F),
+                       retweet_count = colDef(filterable = F)
+                     )
+)
+
+
+
+
+## build corpus
+
+corpus <- iconv(wanted_vars$text, to = "utf-8")
+inspect(corpus[1:5])
+corpus <- Corpus(VectorSource(corpus)) # i think this is to add to a database
+
+############## CLEAN
+
+corpus <- tm_map(corpus, tolower)
+corpus <- tm_map(corpus, removePunctuation)
+corpus <- tm_map(corpus, removeNumbers)
+cleanset <- tm_map(corpus,removeWords, stopwords('english'))
+inspect(cleanset[1:5])
+
+# removeURL <- function(x) gsub('http[[:alnum:]]*','',x)  # creates function to remove strings
+# cleanset <- tm_map(cleanset, content_transformer(removeURL))
+
+cleanset <- tm_map(cleanset, stripWhitespace)
+
+
+
+#### term document matrix.. convert intro structured data
+
+tdm <- TermDocumentMatrix(cleanset)
+tdm # shows that sparsity (i guess number of '0s') is 100. so changing to a matrix
+tdm <- as.matrix(tdm)
+tdm[1:10, 1:20] # now shows count for each word
+
+#take out common irrelevant words
+cleanset <- tm_map(cleanset, removeWords,c('nova', 'scotia'))
+
+#need to do this again I guess
+  tdm <- TermDocumentMatrix(cleanset)
+  tdm # shows that sparsity (i guess number of '0s') is 100. so changing to a matrix
+  tdm <- as.matrix(tdm)
+
+
+# now analyze frequency of words
+w <- rowSums(tdm)
+w <- subset(w,w >= 25)
+barplot(w, las = 2, col = rainbow(50))
+# if u want to replace a word
+# cleanset <- tm_map(cleanset, gsub, pattern = 'stocks', replacement = 'stock')
+
+install.packages("wordcloud")
+library(wordcloud)
+
+w <- sort(rowSums(tdm), decreasing = T )
+set.seed(222)
+wordcloud(words = names(w), freq = w)
