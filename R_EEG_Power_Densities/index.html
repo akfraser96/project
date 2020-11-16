@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Analysis of participant mean EEG spectral power densities for BCI feature selection</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="table-style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+          <a href="../Aviation-safety_edited/_site/index.html">Aviation Safety</a>
+        </li>
+        <li>
+  <a href="../MATLAB-EEG-Feature-Extraction/html/feature_selection.html">EEG Feature Selection with MATLAB</a>
+</li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+<h1 class="title toc-ignore">Analysis of participant mean EEG spectral power densities for BCI feature selection</h1>
+
+</div>
+
+
+<div id="packages-and-functions" class="section level4">
+<h4>Packages and functions</h4>
+<pre class="r"><code># loading the packages used
+pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, tidyverse, glue, kableExtra, reshape2, gridExtra, pheatmap, jpeg, raster, BiocManager, grDevices, imager, readbitmap)
+
+# This function prints a table in APA format
+table_function &lt;- function(table, caption, note){kable(table, format = &quot;html&quot;,col.names = colnames(table), row.names = F, digits = 2, align = c(rep(&quot;c&quot;, times = ncol(table))),
+      caption = caption) %&gt;%
+      kable_styling(full_width = TRUE) %&gt;%
+      row_spec(row = 0, align = &quot;c&quot;) %&gt;%
+      footnote(general_title = &quot;Note.&quot;, general = note,
+           footnote_as_chunk = TRUE)}</code></pre>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Participants performed aircraft flight simulations using virtual reality. The difficulty of flight operations was manipulated.Participants wore an Emotiv EPOC electroencephalography (EEG) headset. I am interested in evaluating possible associations between neural activity and the difficulty, or mental demand of flight.</p>
+<div id="the-emotiv-epoc" class="section level3">
+<h3>The Emotiv Epoc</h3>
+<p>This is a 14 channel portable EEG system. Characteristics of this system benefits research looking at dynamic tasks. The photos below were taken from Duvanige et al., 2013 [link] (<a href="https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56" class="uri">https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56</a>)</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+im &lt;- load.image(&quot;C:/Users/akfra/Documents/EPOC_IGN.jpg&quot;)
+plot(im,bty=&#39;n&#39;, xlim = c(0, 280), ylim = c(270, 0), axes = F)
+
+im &lt;- load.image(&quot;C:/Users/akfra/Documents/emotiv_channels.jpg&quot;)
+plot(im,bty=&#39;n&#39;, xlim = c(50, 600), ylim = c(700, 190), axes = F)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="evaluate-eeg-spectral-power-densities-for-bci-feature-selection" class="section level2">
+<h2>Evaluate EEG spectral power densities for BCI feature selection</h2>
+<div id="importing-and-processing-data" class="section level3">
+<h3>Importing and Processing Data</h3>
+<p>The dataset was achieved through the EEGLAB extension ‘Darbeleil’.</p>
+<pre class="r"><code># Import, format, and remove redunant variables.
+
+df &lt;- read.csv(&#39;C:/Users/akfra/Desktop/Power_CompleteTable.csv&#39;) 
+df$ppt &lt;- regmatches(df[,1], regexpr(&quot;[0-9].*[0-9]&quot;, df[,1]))  #format participant ID
+  df &lt;- df[,3:ncol(df)]                                        #removing &#39;filename&#39; and &#39;condition&#39; from dataframe. 
+  df &lt;- df[,c(1,3:ncol(df))]
+
+
+# Manipulate data into power density differences. High workload - low workload. 
+
+dflow &lt;- df[df$WL == &#39;LOW&#39;,] 
+dfhigh&lt;- df[df$WL == &#39;HIGH&#39;,]
+
+  df_diffs &lt;- data.frame(dflow$ppt, dflow$Freq_int_name, dfhigh[,2:15]-dflow[,2:15])
+
+#  Display data in table
+  
+colnames(df_diffs)[1:2] &lt;- c(&#39;PPT&#39;, &#39;Range&#39;) 
+df_diffs$PPT &lt;- as.numeric(df_diffs$PPT)
+df_diffs &lt;- df_diffs[order(df_diffs$PPT),]
+table &lt;- head(df_diffs, 15)
+caption &lt;- &#39;The Effects of Workload on Power Densities&#39;
+note &lt;- &#39;Effects were obtained by subtracting low workload power densities from high workload for each subject&#39;
+table_function(table, caption, note)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+The Effects of Workload on Power Densities
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;text-align: center;">
+PPT
+</th>
+<th style="text-align:center;text-align: center;">
+Range
+</th>
+<th style="text-align:center;text-align: center;">
+AF3
+</th>
+<th style="text-align:center;text-align: center;">
+AF4
+</th>
+<th style="text-align:center;text-align: center;">
+F3
+</th>
+<th style="text-align:center;text-align: center;">
+F4
+</th>
+<th style="text-align:center;text-align: center;">
+F7
+</th>
+<th style="text-align:center;text-align: center;">
+FC5
+</th>
+<th style="text-align:center;text-align: center;">
+FC6
+</th>
+<th style="text-align:center;text-align: center;">
+O1
+</th>
+<th style="text-align:center;text-align: center;">
+O2
+</th>
+<th style="text-align:center;text-align: center;">
+P7
+</th>
+<th style="text-align:center;text-align: center;">
+P8
+</th>
+<th style="text-align:center;text-align: center;">
+T8
+</th>
+<th style="text-align:center;text-align: center;">
+F8
+</th>
+<th style="text-align:center;text-align: center;">
+T7
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+all
+</td>
+<td style="text-align:center;">
+5.13
+</td>
+<td style="text-align:center;">
+53.18
+</td>
+<td style="text-align:center;">
+23.82
+</td>
+<td style="text-align:center;">
+34.09
+</td>
+<td style="text-align:center;">
+102.22
+</td>
+<td style="text-align:center;">
+19.06
+</td>
+<td style="text-align:center;">
+15.83
+</td>
+<td style="text-align:center;">
+25.38
+</td>
+<td style="text-align:center;">
+45.52
+</td>
+<td style="text-align:center;">
+133.31
+</td>
+<td style="text-align:center;">
+3.29
+</td>
+<td style="text-align:center;">
+47.09
+</td>
+<td style="text-align:center;">
+276.46
+</td>
+<td style="text-align:center;">
+43.31
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+delta
+</td>
+<td style="text-align:center;">
+-1.49
+</td>
+<td style="text-align:center;">
+43.66
+</td>
+<td style="text-align:center;">
+21.74
+</td>
+<td style="text-align:center;">
+28.87
+</td>
+<td style="text-align:center;">
+71.16
+</td>
+<td style="text-align:center;">
+11.63
+</td>
+<td style="text-align:center;">
+10.99
+</td>
+<td style="text-align:center;">
+11.41
+</td>
+<td style="text-align:center;">
+48.46
+</td>
+<td style="text-align:center;">
+93.29
+</td>
+<td style="text-align:center;">
+4.04
+</td>
+<td style="text-align:center;">
+43.08
+</td>
+<td style="text-align:center;">
+205.55
+</td>
+<td style="text-align:center;">
+34.55
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+teta
+</td>
+<td style="text-align:center;">
+6.09
+</td>
+<td style="text-align:center;">
+6.67
+</td>
+<td style="text-align:center;">
+1.47
+</td>
+<td style="text-align:center;">
+4.16
+</td>
+<td style="text-align:center;">
+23.03
+</td>
+<td style="text-align:center;">
+5.50
+</td>
+<td style="text-align:center;">
+3.42
+</td>
+<td style="text-align:center;">
+11.67
+</td>
+<td style="text-align:center;">
+2.50
+</td>
+<td style="text-align:center;">
+28.11
+</td>
+<td style="text-align:center;">
+0.03
+</td>
+<td style="text-align:center;">
+4.52
+</td>
+<td style="text-align:center;">
+55.18
+</td>
+<td style="text-align:center;">
+6.55
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+alfa
+</td>
+<td style="text-align:center;">
+1.58
+</td>
+<td style="text-align:center;">
+2.01
+</td>
+<td style="text-align:center;">
+0.41
+</td>
+<td style="text-align:center;">
+1.25
+</td>
+<td style="text-align:center;">
+4.62
+</td>
+<td style="text-align:center;">
+0.81
+</td>
+<td style="text-align:center;">
+0.89
+</td>
+<td style="text-align:center;">
+2.20
+</td>
+<td style="text-align:center;">
+-1.34
+</td>
+<td style="text-align:center;">
+7.17
+</td>
+<td style="text-align:center;">
+-0.21
+</td>
+<td style="text-align:center;">
+0.61
+</td>
+<td style="text-align:center;">
+9.57
+</td>
+<td style="text-align:center;">
+1.35
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+beta
+</td>
+<td style="text-align:center;">
+-1.05
+</td>
+<td style="text-align:center;">
+0.85
+</td>
+<td style="text-align:center;">
+0.20
+</td>
+<td style="text-align:center;">
+-0.19
+</td>
+<td style="text-align:center;">
+3.42
+</td>
+<td style="text-align:center;">
+1.11
+</td>
+<td style="text-align:center;">
+0.53
+</td>
+<td style="text-align:center;">
+0.10
+</td>
+<td style="text-align:center;">
+-4.10
+</td>
+<td style="text-align:center;">
+4.74
+</td>
+<td style="text-align:center;">
+-0.57
+</td>
+<td style="text-align:center;">
+-1.12
+</td>
+<td style="text-align:center;">
+6.17
+</td>
+<td style="text-align:center;">
+0.86
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+all
+</td>
+<td style="text-align:center;">
+5.10
+</td>
+<td style="text-align:center;">
+-0.70
+</td>
+<td style="text-align:center;">
+-9.45
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-1.78
+</td>
+<td style="text-align:center;">
+-255.02
+</td>
+<td style="text-align:center;">
+-15.41
+</td>
+<td style="text-align:center;">
+-29.62
+</td>
+<td style="text-align:center;">
+15.40
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-2.47
+</td>
+<td style="text-align:center;">
+-10.19
+</td>
+<td style="text-align:center;">
+-9.57
+</td>
+<td style="text-align:center;">
+-3.05
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+delta
+</td>
+<td style="text-align:center;">
+4.23
+</td>
+<td style="text-align:center;">
+2.69
+</td>
+<td style="text-align:center;">
+-9.72
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-2.40
+</td>
+<td style="text-align:center;">
+-223.85
+</td>
+<td style="text-align:center;">
+-11.66
+</td>
+<td style="text-align:center;">
+-19.72
+</td>
+<td style="text-align:center;">
+11.55
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-10.73
+</td>
+<td style="text-align:center;">
+-9.02
+</td>
+<td style="text-align:center;">
+-5.30
+</td>
+<td style="text-align:center;">
+0.68
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+teta
+</td>
+<td style="text-align:center;">
+-0.66
+</td>
+<td style="text-align:center;">
+-0.90
+</td>
+<td style="text-align:center;">
+-0.21
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-0.43
+</td>
+<td style="text-align:center;">
+-21.71
+</td>
+<td style="text-align:center;">
+-1.43
+</td>
+<td style="text-align:center;">
+-3.70
+</td>
+<td style="text-align:center;">
+-0.46
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-0.99
+</td>
+<td style="text-align:center;">
+-0.98
+</td>
+<td style="text-align:center;">
+-2.27
+</td>
+<td style="text-align:center;">
+-1.27
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+alfa
+</td>
+<td style="text-align:center;">
+0.37
+</td>
+<td style="text-align:center;">
+-0.05
+</td>
+<td style="text-align:center;">
+-0.20
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-0.17
+</td>
+<td style="text-align:center;">
+-7.58
+</td>
+<td style="text-align:center;">
+-1.33
+</td>
+<td style="text-align:center;">
+-2.54
+</td>
+<td style="text-align:center;">
+-0.39
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-0.10
+</td>
+<td style="text-align:center;">
+-0.37
+</td>
+<td style="text-align:center;">
+-1.17
+</td>
+<td style="text-align:center;">
+-0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+beta
+</td>
+<td style="text-align:center;">
+1.17
+</td>
+<td style="text-align:center;">
+-2.43
+</td>
+<td style="text-align:center;">
+0.68
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+1.23
+</td>
+<td style="text-align:center;">
+-1.88
+</td>
+<td style="text-align:center;">
+-0.99
+</td>
+<td style="text-align:center;">
+-3.66
+</td>
+<td style="text-align:center;">
+4.69
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+9.35
+</td>
+<td style="text-align:center;">
+0.18
+</td>
+<td style="text-align:center;">
+-0.82
+</td>
+<td style="text-align:center;">
+-2.30
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+all
+</td>
+<td style="text-align:center;">
+17.76
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+0.55
+</td>
+<td style="text-align:center;">
+39.19
+</td>
+<td style="text-align:center;">
+49.17
+</td>
+<td style="text-align:center;">
+44.14
+</td>
+<td style="text-align:center;">
+82.59
+</td>
+<td style="text-align:center;">
+32.59
+</td>
+<td style="text-align:center;">
+123.79
+</td>
+<td style="text-align:center;">
+42.41
+</td>
+<td style="text-align:center;">
+29.26
+</td>
+<td style="text-align:center;">
+-9.82
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+62.52
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+delta
+</td>
+<td style="text-align:center;">
+18.58
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-1.20
+</td>
+<td style="text-align:center;">
+31.71
+</td>
+<td style="text-align:center;">
+42.78
+</td>
+<td style="text-align:center;">
+40.00
+</td>
+<td style="text-align:center;">
+91.95
+</td>
+<td style="text-align:center;">
+19.94
+</td>
+<td style="text-align:center;">
+94.79
+</td>
+<td style="text-align:center;">
+1.75
+</td>
+<td style="text-align:center;">
+9.70
+</td>
+<td style="text-align:center;">
+3.65
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+35.89
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+teta
+</td>
+<td style="text-align:center;">
+-1.05
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+-2.09
+</td>
+<td style="text-align:center;">
+0.36
+</td>
+<td style="text-align:center;">
+2.41
+</td>
+<td style="text-align:center;">
+0.51
+</td>
+<td style="text-align:center;">
+-3.19
+</td>
+<td style="text-align:center;">
+2.69
+</td>
+<td style="text-align:center;">
+11.88
+</td>
+<td style="text-align:center;">
+2.46
+</td>
+<td style="text-align:center;">
+-0.01
+</td>
+<td style="text-align:center;">
+1.47
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+0.81
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+alfa
+</td>
+<td style="text-align:center;">
+-0.82
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+0.78
+</td>
+<td style="text-align:center;">
+1.08
+</td>
+<td style="text-align:center;">
+0.24
+</td>
+<td style="text-align:center;">
+1.38
+</td>
+<td style="text-align:center;">
+-4.47
+</td>
+<td style="text-align:center;">
+7.66
+</td>
+<td style="text-align:center;">
+7.51
+</td>
+<td style="text-align:center;">
+6.57
+</td>
+<td style="text-align:center;">
+3.14
+</td>
+<td style="text-align:center;">
+-9.07
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+beta
+</td>
+<td style="text-align:center;">
+1.04
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+3.06
+</td>
+<td style="text-align:center;">
+6.04
+</td>
+<td style="text-align:center;">
+3.75
+</td>
+<td style="text-align:center;">
+2.25
+</td>
+<td style="text-align:center;">
+-1.70
+</td>
+<td style="text-align:center;">
+2.29
+</td>
+<td style="text-align:center;">
+9.60
+</td>
+<td style="text-align:center;">
+31.62
+</td>
+<td style="text-align:center;">
+16.43
+</td>
+<td style="text-align:center;">
+-5.87
+</td>
+<td style="text-align:center;">
+NaN
+</td>
+<td style="text-align:center;">
+24.83
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<span style="font-style: italic;">Note.</span> <sup></sup> Effects were obtained by subtracting low workload power densities from high workload for each subject
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="plot-the-distributions-of-effects-of-wl-effects" class="section level3">
+<h3>Plot the distributions of effects of WL effects</h3>
+<pre class="r"><code>m.across_wl &lt;- melt(df_diffs[,2:ncol(df_diffs)], id.vars = &quot;Range&quot;)
+m.across_wl$value &lt;- as.numeric(m.across_wl$value) 
+
+d &lt;- ggplot(m.across_wl[m.across_wl$Range == &quot;delta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;)  + ggtitle(&quot;Delta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position=&quot;none&quot;)
+
+t &lt;- ggplot(m.across_wl[m.across_wl$Range == &quot;teta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;)  + ggtitle(&quot;Theta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position=&quot;none&quot;)
+
+a &lt;- ggplot(m.across_wl[m.across_wl$Range == &quot;alfa&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;)  + ggtitle(&quot;Alpha&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position=&quot;none&quot;)
+
+b &lt;- ggplot(m.across_wl[m.across_wl$Range == &quot;beta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;)  + ggtitle(&quot;Beta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position=&quot;none&quot;)
+
+grid.arrange(d, t, a, b, nrow = 4)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>There are some really extreme values. Remove these.</p>
+<pre class="r"><code>cols &lt;- c(&quot;1&quot;=&quot;#00aedb&quot;,&quot;2&quot;=&quot;#ffc425&quot;,&quot;3&quot;=&quot;#f37735&quot;)
+p &lt;- ggplot(m.across_wl, aes(x = NA, y = value)) + geom_boxplot(outlier.shape = NA, width = 0.2) + geom_jitter()  + theme(axis.title.x = element_blank()) + theme(axis.text.x = element_blank())
+
+stand_dev &lt;- sd(m.across_wl$value, na.rm = T)
+p &lt;- p + geom_hline(yintercept=c(stand_dev, stand_dev *-1), linetype=&quot;solid&quot;, color = &quot;#00aedb&quot;, size=1) + geom_hline(yintercept=c(stand_dev*2, stand_dev *-2), linetype=&quot;solid&quot;, color = &quot;#ffc425&quot;, size=1) + geom_hline(yintercept=c(stand_dev*3, stand_dev *-3), linetype=&quot;solid&quot;, color = &quot;#f37735&quot;, size=1) + ggtitle(&#39;Standard Deviations&#39;)
+
+d &lt;-  ggplot(m.across_wl, aes(x=value))+ geom_density() + theme(axis.title.x = element_blank()) + theme(axis.text.x = element_blank()) + ggtitle(&#39;Density Plot&#39;)
+
+grid.arrange(p,d, nrow = 1)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>The extreme values here are very unlikely to be reliable sources of neural activity. Each point is an individual difference between two points of time corresponding to different workload conditions. Changes of ~200 mv and above are not natural phenomena and are likely better explained by displacement of electrodes and other artifacts.</p>
+<div id="remove-bad-data" class="section level4">
+<h4>Remove bad data</h4>
+<pre class="r"><code>m.across_wl_RemoveOutliers &lt;- m.across_wl
+m.across_wl_RemoveOutliers &lt;- m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$value &lt; stand_dev * 2,] 
+m.across_wl_RemoveOutliers &lt;- m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$value &gt; stand_dev *-2,] 
+m.across_wl_RemoveOutliers &lt;- na.omit(m.across_wl_RemoveOutliers)
+
+d &lt;- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == &quot;delta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;) + ggtitle(&quot;Delta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position=&quot;none&quot;)
+
+t &lt;- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == &quot;teta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;) + ggtitle(&quot;Theta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position=&quot;none&quot;)
+
+a &lt;- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == &quot;alfa&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;) + ggtitle(&quot;Alpha&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position=&quot;none&quot;)
+
+b &lt;- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == &quot;beta&quot;,], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color = &quot;black&quot;, size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab(&quot;PPT PD Differences(µV)&quot;) + ggtitle(&quot;Beta&quot;) + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20))  + theme(legend.position=&quot;none&quot;)
+
+grid.arrange(d, t, a, b, nrow = 4)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="compute-medians-for-each-electrode-frequency-band-effect" class="section level3">
+<h3>Compute medians for each electrode * frequency band effect</h3>
+<p>Medians will mitigate the influence of extreme values which still appear in data (above boxplots)</p>
+<pre class="r"><code># remove extreme values from the datastructure containing individual differences
+stand_dev &lt;- sd(m.across_wl$value, na.rm = T) 
+  df_diffs_RemoveOutliers &lt;- df_diffs
+    values &lt;- df_diffs_RemoveOutliers[,3:ncol(df_diffs_RemoveOutliers)] 
+      values[values &gt; stand_dev * 2] &lt;- NA
+      values[values &lt; stand_dev * - 2] &lt;- NA
+
+          df_diffs_RemoveOutliers[,3:ncol(df_diffs_RemoveOutliers)] &lt;- values
+
+# aggregate median effect sizes
+AF3_means  &lt;- aggregate(AF3 ~ Range, data = df_diffs_RemoveOutliers, median)
+effects &lt;- data.frame(AF3_means)
+
+for(i in 4:16) {
+  m &lt;- aggregate(df_diffs_RemoveOutliers[,i] ~ Range, data = df_diffs_RemoveOutliers, median) 
+  effects &lt;- data.frame(effects,m[,2])
+}
+
+
+# format table
+colnames(effects)[2:15]&lt;- colnames(df_diffs[3:16])
+rownames(effects) &lt;- c(&#39;Alpha&#39;, &#39;All&#39;, &#39;Beta&#39;, &#39;Delta&#39;, &#39;Theta&#39;)
+
+table_function &lt;- function(table, caption, note){kable(table, format = &quot;html&quot;,col.names = colnames(table), digits = 2, align = c(rep(&quot;c&quot;, times = ncol(table))),
+      caption = caption) %&gt;%
+      kable_styling(full_width = TRUE) %&gt;%
+      row_spec(row = 0, align = &quot;c&quot;) %&gt;%
+      footnote(general_title = &quot;Note.&quot;, general = note,
+           footnote_as_chunk = TRUE)}
+
+table &lt;- effects[,2:ncol(effects)]
+caption &lt;- &#39;Median effect size of high workload - low workload power densities&#39;
+note &lt;- &#39;Median statistics were chosen to offset influence of noise that likely related to generation of larger effect sizes. Values beyond 2 sds were removed as they likely were a result of noise, common in movement + EEG settings.&#39;
+table_function(table, caption, note)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Median effect size of high workload - low workload power densities
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;text-align: center;">
+</th>
+<th style="text-align:center;text-align: center;">
+AF3
+</th>
+<th style="text-align:center;text-align: center;">
+AF4
+</th>
+<th style="text-align:center;text-align: center;">
+F3
+</th>
+<th style="text-align:center;text-align: center;">
+F4
+</th>
+<th style="text-align:center;text-align: center;">
+F7
+</th>
+<th style="text-align:center;text-align: center;">
+FC5
+</th>
+<th style="text-align:center;text-align: center;">
+FC6
+</th>
+<th style="text-align:center;text-align: center;">
+O1
+</th>
+<th style="text-align:center;text-align: center;">
+O2
+</th>
+<th style="text-align:center;text-align: center;">
+P7
+</th>
+<th style="text-align:center;text-align: center;">
+P8
+</th>
+<th style="text-align:center;text-align: center;">
+T8
+</th>
+<th style="text-align:center;text-align: center;">
+F8
+</th>
+<th style="text-align:center;text-align: center;">
+T7
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Alpha
+</td>
+<td style="text-align:center;">
+-0.13
+</td>
+<td style="text-align:center;">
+-0.12
+</td>
+<td style="text-align:center;">
+-0.06
+</td>
+<td style="text-align:center;">
+0.08
+</td>
+<td style="text-align:center;">
+-0.11
+</td>
+<td style="text-align:center;">
+0.06
+</td>
+<td style="text-align:center;">
+-0.14
+</td>
+<td style="text-align:center;">
+0.15
+</td>
+<td style="text-align:center;">
+-0.10
+</td>
+<td style="text-align:center;">
+-0.11
+</td>
+<td style="text-align:center;">
+-1.06
+</td>
+<td style="text-align:center;">
+-0.02
+</td>
+<td style="text-align:center;">
+-0.18
+</td>
+<td style="text-align:center;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+All
+</td>
+<td style="text-align:center;">
+2.39
+</td>
+<td style="text-align:center;">
+2.49
+</td>
+<td style="text-align:center;">
+-0.86
+</td>
+<td style="text-align:center;">
+4.30
+</td>
+<td style="text-align:center;">
+0.71
+</td>
+<td style="text-align:center;">
+5.30
+</td>
+<td style="text-align:center;">
+1.13
+</td>
+<td style="text-align:center;">
+3.69
+</td>
+<td style="text-align:center;">
+3.32
+</td>
+<td style="text-align:center;">
+0.72
+</td>
+<td style="text-align:center;">
+1.93
+</td>
+<td style="text-align:center;">
+0.86
+</td>
+<td style="text-align:center;">
+0.86
+</td>
+<td style="text-align:center;">
+6.14
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Beta
+</td>
+<td style="text-align:center;">
+0.42
+</td>
+<td style="text-align:center;">
+0.29
+</td>
+<td style="text-align:center;">
+0.20
+</td>
+<td style="text-align:center;">
+0.31
+</td>
+<td style="text-align:center;">
+2.07
+</td>
+<td style="text-align:center;">
+1.77
+</td>
+<td style="text-align:center;">
+0.06
+</td>
+<td style="text-align:center;">
+0.26
+</td>
+<td style="text-align:center;">
+0.43
+</td>
+<td style="text-align:center;">
+1.48
+</td>
+<td style="text-align:center;">
+1.54
+</td>
+<td style="text-align:center;">
+0.05
+</td>
+<td style="text-align:center;">
+0.70
+</td>
+<td style="text-align:center;">
+2.95
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Delta
+</td>
+<td style="text-align:center;">
+0.18
+</td>
+<td style="text-align:center;">
+1.14
+</td>
+<td style="text-align:center;">
+-0.49
+</td>
+<td style="text-align:center;">
+6.39
+</td>
+<td style="text-align:center;">
+0.69
+</td>
+<td style="text-align:center;">
+1.26
+</td>
+<td style="text-align:center;">
+1.44
+</td>
+<td style="text-align:center;">
+2.05
+</td>
+<td style="text-align:center;">
+4.27
+</td>
+<td style="text-align:center;">
+-0.17
+</td>
+<td style="text-align:center;">
+1.96
+</td>
+<td style="text-align:center;">
+2.32
+</td>
+<td style="text-align:center;">
+1.80
+</td>
+<td style="text-align:center;">
+1.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Theta
+</td>
+<td style="text-align:center;">
+-0.36
+</td>
+<td style="text-align:center;">
+-0.47
+</td>
+<td style="text-align:center;">
+-0.25
+</td>
+<td style="text-align:center;">
+0.36
+</td>
+<td style="text-align:center;">
+-0.04
+</td>
+<td style="text-align:center;">
+-0.02
+</td>
+<td style="text-align:center;">
+-0.18
+</td>
+<td style="text-align:center;">
+0.25
+</td>
+<td style="text-align:center;">
+0.27
+</td>
+<td style="text-align:center;">
+0.18
+</td>
+<td style="text-align:center;">
+-0.44
+</td>
+<td style="text-align:center;">
+-0.36
+</td>
+<td style="text-align:center;">
+-0.06
+</td>
+<td style="text-align:center;">
+0.57
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<span style="font-style: italic;">Note.</span> <sup></sup> Median statistics were chosen to offset influence of noise that likely related to generation of larger effect sizes. Values beyond 2 sds were removed as they likely were a result of noise, common in movement + EEG settings.
+</td>
+</tr>
+</tfoot>
+</table>
+<p>Using this table to construct heatmap. I selected out ‘ALL’ to evaluate potential of particular features, and removed Delta as jaw and movement artifacts are often observed in this frequency range. Additional small amount of sampling (&lt;4Hz) results in poor potential in pattern recognition procedures.</p>
+<pre class="r"><code>p1 &lt;- pheatmap(table[c(1,3,5),], main = &quot;Median Effect Size: High - Low workload power densities&quot;, dendrogram = F, cluster_rows = T, cluster_cols = T, fontsize = 12)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>This heatmap shows the relative differences in power density effects observed across different frequency bands and electrodes. Patterns resembling the ‘Engagment Index’ manifest across parietal and some frontal electrodes where beta power is increased with high workload whereas alpha and theta power densities decrease or increase minimally.</p>
+<p>Since these patterns have been found in many other contexts of high workload and engagement this provides support for the signal acquisition procedure used in this study. Additionally it provides direction for feature selection in BCI.</p>
+<pre class="r"><code>engagement_ratios_all &lt;- data.frame(table[3,1]-(table[1,1] + table[5,1]))
+
+for (i in 2:14) {
+  r &lt;- data.frame(table[3,i]-(table[1,i] + table[5,i]))
+  engagement_ratios_all &lt;- data.frame(engagement_ratios_all, r)
+}
+
+colnames(engagement_ratios_all) &lt;- colnames(table)</code></pre>
+<p>cont….</p>
+</div>
+<div id="evaluate-indices-score-vs-clssification-rates." class="section level3">
+<h3>Evaluate indices score vs clssification rates.</h3>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,193 @@
+---
+title: "Analysis of participant mean EEG spectral power densities for BCI feature selection"
+output: html_document
+css: table-style.css
+---
+
+#### Packages and functions
+```{r}
+# loading the packages used
+pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, tidyverse, glue, kableExtra, reshape2, gridExtra, pheatmap, jpeg, raster, BiocManager, grDevices, imager, readbitmap)
+
+# This function prints a table in APA format
+table_function <- function(table, caption, note){kable(table, format = "html",col.names = colnames(table), row.names = F, digits = 2, align = c(rep("c", times = ncol(table))),
+      caption = caption) %>%
+      kable_styling(full_width = TRUE) %>%
+      row_spec(row = 0, align = "c") %>%
+      footnote(general_title = "Note.", general = note,
+           footnote_as_chunk = TRUE)}
+```
+
+## Introduction
+
+Participants performed aircraft flight simulations using virtual reality. The difficulty of flight operations was manipulated.Participants wore an Emotiv EPOC electroencephalography (EEG) headset. I am interested in evaluating possible associations between neural activity and the difficulty, or mental demand of flight.
+
+### The Emotiv Epoc
+This is a 14 channel portable EEG system. Characteristics of this system benefits research looking at dynamic tasks. The photos below were taken from Duvanige et al., 2013 [link] (https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56)
+
+```{r}
+im <- load.image("C:/Users/akfra/Documents/EPOC_IGN.jpg")
+p1 <- plot(im,bty='n', xlim = c(0, 250), ylim = c(270, 0), axes = F)
+
+im <- load.image("C:/Users/akfra/Documents/emotiv_channels.jpg")
+p2 <- plot(im,bty='n', xlim = c(50, 600), ylim = c(700, 190), axes = F)
+
+par(mfrow=c(1,2))
+plot(p1)
+plot(p2)
+```
+
+
+## Evaluate EEG spectral power densities for BCI feature selection
+
+### Importing and Processing Data
+
+The dataset was achieved through the EEGLAB extension 'Darbeleil'. 
+
+```{r, fig.width= 10, out.width = "70%"}
+
+# Import, format, and remove redunant variables.
+
+df <- read.csv('C:/Users/akfra/Desktop/Power_CompleteTable.csv') 
+df$ppt <- regmatches(df[,1], regexpr("[0-9].*[0-9]", df[,1]))  #format participant ID
+  df <- df[,3:ncol(df)]                                        #removing 'filename' and 'condition' from dataframe. 
+  df <- df[,c(1,3:ncol(df))]
+
+
+# Manipulate data into power density differences. High workload - low workload. 
+
+dflow <- df[df$WL == 'LOW',] 
+dfhigh<- df[df$WL == 'HIGH',]
+
+  df_diffs <- data.frame(dflow$ppt, dflow$Freq_int_name, dfhigh[,2:15]-dflow[,2:15])
+
+#  Display data in table
+  
+colnames(df_diffs)[1:2] <- c('PPT', 'Range') 
+df_diffs$PPT <- as.numeric(df_diffs$PPT)
+df_diffs <- df_diffs[order(df_diffs$PPT),]
+table <- head(df_diffs, 15)
+caption <- 'The Effects of Workload on Power Densities'
+note <- 'Effects were obtained by subtracting low workload power densities from high workload for each subject'
+table_function(table, caption, note)
+
+```
+
+### Plot the distributions of effects of WL effects
+
+```{r, warning=F, message=F, fig.height= 12, fig.align='center'}
+m.across_wl <- melt(df_diffs[,2:ncol(df_diffs)], id.vars = "Range")
+m.across_wl$value <- as.numeric(m.across_wl$value) 
+
+d <- ggplot(m.across_wl[m.across_wl$Range == "delta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)")  + ggtitle("Delta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position="none")
+
+t <- ggplot(m.across_wl[m.across_wl$Range == "teta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)")  + ggtitle("Theta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position="none")
+
+a <- ggplot(m.across_wl[m.across_wl$Range == "alfa",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)")  + ggtitle("Alpha") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position="none")
+
+b <- ggplot(m.across_wl[m.across_wl$Range == "beta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)")  + ggtitle("Beta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + theme(legend.position="none")
+
+grid.arrange(d, t, a, b, nrow = 4)
+```
+
+There are some really extreme values. Remove these.
+
+```{r, warning= F, message=F, fig.align='center'}
+cols <- c("1"="#00aedb","2"="#ffc425","3"="#f37735")
+p <- ggplot(m.across_wl, aes(x = NA, y = value)) + geom_boxplot(outlier.shape = NA, width = 0.2) + geom_jitter()  + theme(axis.title.x = element_blank()) + theme(axis.text.x = element_blank())
+
+stand_dev <- sd(m.across_wl$value, na.rm = T)
+p <- p + geom_hline(yintercept=c(stand_dev, stand_dev *-1), linetype="solid", color = "#00aedb", size=1) + geom_hline(yintercept=c(stand_dev*2, stand_dev *-2), linetype="solid", color = "#ffc425", size=1) + geom_hline(yintercept=c(stand_dev*3, stand_dev *-3), linetype="solid", color = "#f37735", size=1) + ggtitle('Standard Deviations')
+
+d <-  ggplot(m.across_wl, aes(x=value))+ geom_density() + theme(axis.title.x = element_blank()) + theme(axis.text.x = element_blank()) + ggtitle('Density Plot')
+
+grid.arrange(p,d, nrow = 1)
+```
+
+The extreme values here are very unlikely to be reliable sources of neural activity. Each point is an individual difference between two points of time corresponding to different workload conditions. Changes of ~200 mv and above are not natural phenomena and are likely better explained by displacement of electrodes and other artifacts. 
+
+#### Remove bad data
+
+```{r, message=F, warning= F, fig.height= 12, fig.align='center'}
+m.across_wl_RemoveOutliers <- m.across_wl
+m.across_wl_RemoveOutliers <- m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$value < stand_dev * 2,] 
+m.across_wl_RemoveOutliers <- m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$value > stand_dev *-2,] 
+m.across_wl_RemoveOutliers <- na.omit(m.across_wl_RemoveOutliers)
+
+d <- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == "delta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)") + ggtitle("Delta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position="none")
+
+t <- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == "teta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)") + ggtitle("Theta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position="none")
+
+a <- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == "alfa",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)") + ggtitle("Alpha") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20)) + theme(legend.position="none")
+
+b <- ggplot(m.across_wl_RemoveOutliers[m.across_wl_RemoveOutliers$Range == "beta",], aes(variable, value, fill= variable)) + geom_hline(yintercept=0, linetype="dashed", color = "black", size=1) + geom_boxplot(outlier.shape = NA) + geom_jitter() + ylab("PPT PD Differences(µV)") + ggtitle("Beta") + theme(plot.title = element_text(hjust = 0.5)) + theme(text=element_text(size=14)) + theme(axis.title.x = element_blank()) + scale_y_continuous(limits=c(-50,50), breaks=seq(-50,50,20))  + theme(legend.position="none")
+
+grid.arrange(d, t, a, b, nrow = 4)
+```
+
+### Compute medians for each electrode * frequency band effect
+
+Medians will mitigate the influence of extreme values which still appear in data (above boxplots)
+
+```{r}
+# remove extreme values from the datastructure containing individual differences
+stand_dev <- sd(m.across_wl$value, na.rm = T) 
+  df_diffs_RemoveOutliers <- df_diffs
+    values <- df_diffs_RemoveOutliers[,3:ncol(df_diffs_RemoveOutliers)] 
+      values[values > stand_dev * 2] <- NA
+      values[values < stand_dev * - 2] <- NA
+
+          df_diffs_RemoveOutliers[,3:ncol(df_diffs_RemoveOutliers)] <- values
+
+# aggregate median effect sizes
+AF3_means  <- aggregate(AF3 ~ Range, data = df_diffs_RemoveOutliers, median)
+effects <- data.frame(AF3_means)
+
+for(i in 4:16) {
+  m <- aggregate(df_diffs_RemoveOutliers[,i] ~ Range, data = df_diffs_RemoveOutliers, median) 
+  effects <- data.frame(effects,m[,2])
+}
+
+
+# format table
+colnames(effects)[2:15]<- colnames(df_diffs[3:16])
+rownames(effects) <- c('Alpha', 'All', 'Beta', 'Delta', 'Theta')
+
+table_function <- function(table, caption, note){kable(table, format = "html",col.names = colnames(table), digits = 2, align = c(rep("c", times = ncol(table))),
+      caption = caption) %>%
+      kable_styling(full_width = TRUE) %>%
+      row_spec(row = 0, align = "c") %>%
+      footnote(general_title = "Note.", general = note,
+           footnote_as_chunk = TRUE)}
+
+table <- effects[,2:ncol(effects)]
+caption <- 'Median effect size of high workload - low workload power densities'
+note <- 'Median statistics were chosen to offset influence of noise that likely related to generation of larger effect sizes. Values beyond 2 sds were removed as they likely were a result of noise, common in movement + EEG settings.'
+table_function(table, caption, note)
+```
+
+Using this table to construct heatmap. I selected out 'ALL' to evaluate potential of particular features, and removed Delta as jaw and movement artifacts are often observed in this frequency range. Additional small amount of sampling (<4Hz) results in poor potential in pattern recognition procedures.  
+
+```{r, fig.align='center'}
+p1 <- pheatmap(table[c(1,3,5),], main = "Median Effect Size: High - Low workload power densities", dendrogram = F, cluster_rows = T, cluster_cols = T, fontsize = 12)
+
+```
+
+This heatmap shows the relative differences in power density effects observed across different frequency bands and electrodes. Patterns resembling the 'Engagment Index' manifest across parietal and some frontal electrodes where beta power is increased with high workload whereas alpha and theta power densities decrease or increase minimally. 
+
+Since these patterns have been found in many other contexts of high workload and engagement this provides support for the signal acquisition procedure used in this study. Additionally it provides direction for feature selection in BCI. 
+
+```{r}
+engagement_ratios_all <- data.frame(table[3,1]-(table[1,1] + table[5,1]))
+
+for (i in 2:14) {
+  r <- data.frame(table[3,i]-(table[1,i] + table[5,i]))
+  engagement_ratios_all <- data.frame(engagement_ratios_all, r)
+}
+
+colnames(engagement_ratios_all) <- colnames(table)
+
+```
+cont....
+
+### Evaluate indices score vs clssification rates.
