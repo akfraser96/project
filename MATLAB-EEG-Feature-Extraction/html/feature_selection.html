@@ -1,0 +1,717 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document. --> 
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="../../index.html">Home</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="../../R_EEG_Power_Densities/index.html">EEG power densities with R</a>
+</li>
+<li>
+  <a href="../../Aviation-safety_edited/_site/index.html">Aviation Safety</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+</div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+    
+    </div>
+
+
+      --><title>Feature selection of Electroencephalography (EEG) data for workload level detection.</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-08-14"><meta name="DC.source" content="feature_selection.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Feature selection of Electroencephalography (EEG) data for workload level detection.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Introduction</a></li><li><a href="#2">Load data from best performing subject</a></li><li><a href="#3">Plot all electrodes EEG</a></li><li><a href="#4">1) segment data for high vs medium workload</a></li><li><a href="#5">Evaluate power spectral density differences at each electrode.</a></li><li><a href="#7">3 + 4: compute mean power spectral densities</a></li><li><a href="#8">Visualize power spectral densities without delta.</a></li><li><a href="#9">Stage 1 of feature reduction.</a></li><li><a href="#10">Perform stepwise logistic regression for variable selection</a></li><li><a href="#11">Next steps</a></li></ul></div><h2 id="1">Introduction</h2><p>Exploring signal processing, visualization, and machine learning techniques with EEG data for MATLAB. The data is from select participants who performed virtual reality flight simulations of that varied in level of difficulty throughout the flight task. I am interested in correlations between EEG data and workload (corresponding to flight difficulty)</p><p>The EEG datasets loaded in this project were preprocessed using an automated script that implemented independent component analysis. The script labelled each 1-second window of data as either high or medium workload. The script outputted a continuous dataset that appended non-contiguous epochs, that were separated due to epoch rejection. A continuous dataset was necessary for BCIlab implementation. A second dataset was created that keep data epoched. This was used to power density analysis which was used to direct EEG feature selection for machine learning model.</p><h2 id="2">Load data from best performing subject</h2><pre class="codeinput">data_CT = load(<span class="string">'-mat'</span>,<span class="string">'C:\Users\akfra\Desktop\s15_appended_CT.set'</span>); <span class="comment">% the continuous dataset. Going to visualize EEG from preprocessing</span>
+</pre><h2 id="3">Plot all electrodes EEG</h2><pre class="codeinput">t=data_CT.EEG.times;
+y=data_CT.EEG.data;
+labels = {data_CT.EEG.chanlocs(:).labels};
+
+
+p = figure;
+<span class="keyword">for</span> i=1:13
+     subplot(7,2,i);
+     plot(t/1000,y(i,:));
+     title(labels(i));
+     ylim([-100 100]);
+     ylabel(<span class="string">'Voltage(uV)'</span>);
+     xlabel(<span class="string">'Time(s)'</span>);
+     sgtitle(<span class="string">'Electroencephalograms'</span>);
+<span class="keyword">end</span>
+set(p, <span class="string">'Units'</span>, <span class="string">'Normalized'</span>, <span class="string">'OuterPosition'</span>, [0, 0.04, 1, 0.96]);
+figure(p)
+
+    snapnow
+ <span class="comment">% plot shows there is less than 120 s of data. This is due to epoch rejection.</span>
+ <span class="comment">% Electrode O2 is displaying much greater voltage deflections than other</span>
+ <span class="comment">% electrodes. This is likely noise - probably coming from rate of blinks,</span>
+ <span class="comment">% eye movements, or electrode displacement.</span>
+</pre><img vspace="5" hspace="5" src="feature_selection_01.png" alt=""> <h2 id="4">1) segment data for high vs medium workload</h2><p>I am using latency field to obtain 'trigger' times that indicate workload condition. latency contains time indices of when a code was sent to EEG indicating high or low workload. code '2211' corresponds to medium workload and '4422' corresponds to high.</p><pre class="codeinput"> latency = cell2mat({data_CT.EEG.event(:).latency});
+ event = {data_CT.EEG.event(:).type};
+
+    mwl_idx = strcmp(event, <span class="string">'2211'</span>);
+    mwl_idx = latency(mwl_idx); <span class="comment">% number of timepoints from beginning of recording.</span>
+    mwl_1 = mwl_idx(1);
+    mwl_end = mwl_idx(end);
+
+    hwl_idx = strcmp(event, <span class="string">'4422'</span>);
+    hwl_idx = latency(hwl_idx);
+    hwl_1 = hwl_idx(1);
+    hwl_end = hwl_idx(end);
+
+
+ <span class="comment">%  Display time segmentation</span>
+
+ p = figure;
+ subplot(7,2,1);
+
+ text( 0.35,0.15,<span class="string">'Medium Workload'</span>, <span class="string">'color'</span>, <span class="string">'#EDB120'</span>, <span class="string">'FontSize'</span>, 16); axis <span class="string">off</span>;
+ text( 0.385,0.8,<span class="string">'High Workload'</span>, <span class="string">'color'</span>, <span class="string">'#D95319'</span>, <span class="string">'FontSize'</span>, 16); axis <span class="string">off</span>;
+
+<span class="keyword">for</span> i=1:13;
+     subplot(7,2,i+1);
+     hold <span class="string">on</span>;
+     plot(t/1000,y(i,:));
+     plot(t(mwl_1:mwl_end)/1000, y(i, mwl_1:mwl_end),<span class="string">'color'</span>,<span class="string">'#EDB120'</span>);
+     plot(t(hwl_1:hwl_end)/1000, y(i, hwl_1:hwl_end), <span class="string">'color'</span>, <span class="string">'#D95319'</span>);
+     title(labels(i));
+     ylim([-100 100]);
+     ylabel(<span class="string">'Voltage(uV)'</span>);
+     xlabel(<span class="string">'Time(s)'</span>);
+     sgtitle(<span class="string">'Electroencephalograms and workload segments'</span>);
+     hold <span class="string">off</span>;
+<span class="keyword">end</span>
+
+    set(p, <span class="string">'Units'</span>, <span class="string">'Normalized'</span>, <span class="string">'OuterPosition'</span>, [0, 0.04, 1, 0.96]);
+    figure(p)
+    snapnow
+
+  <span class="comment">% The workload conditions are segmented and roughly balanced. There is slightly more time spent in medium workload.</span>
+</pre><img vspace="5" hspace="5" src="feature_selection_02.png" alt=""> <img vspace="5" hspace="5" src="feature_selection_03.png" alt=""> <h2 id="5">Evaluate power spectral density differences at each electrode.</h2><p>'Continuous' dataset is actually sampled from different time points, so oscillations being examined get interupted.</p><p>Therefore:</p><div><ul><li>1) import epoched data.</li></ul></div><div><ul><li>2) index high and medium workload epochs.</li></ul></div><div><ul><li>3) compute densities for each epoch.</li></ul></div><div><ul><li>4) average across epochs for each workload level.</li></ul></div><div><ul><li>1) Load epoched data from a good performing subject. (R project 'EEG power densities' explores this topic).</li></ul></div><pre class="codeinput">data_EPOC = load(<span class="string">'-mat'</span>,<span class="string">'C:\Users\akfra\Desktop\s15_appended_EPOC.set'</span>);
+
+<span class="comment">% 2) index high and medium workload epochs</span>
+
+labels = {data_EPOC.EEG.chanlocs(:).labels};
+
+<span class="comment">% determine sampling rate</span>
+figure; plot(diff(data_EPOC.EEG.times), <span class="string">'.'</span>)
+title(<span class="string">'Time difference between successive points'</span>);
+max(diff(data_EPOC.EEG.times)) - min(diff(data_EPOC.EEG.times));
+fs = 1000/mean(diff(data_EPOC.EEG.times));
+
+<span class="comment">% plot times for hwl and mwl events. Determine how I will partition them.</span>
+figure; hold <span class="string">on</span>;
+plot(latency);
+
+mwl_pts = ismember(event, <span class="string">'2211'</span>);
+hwl_pts = ismember(event, <span class="string">'4422'</span>);
+
+x_mwl = find(ismember(event, <span class="string">'2211'</span>));
+x_hwl = find(ismember(event, <span class="string">'4422'</span>));
+
+plot(x_hwl, latency(hwl_pts),<span class="string">'*'</span>);
+plot(x_mwl, latency(mwl_pts),<span class="string">'*'</span>)
+
+title(<span class="string">'Workload epoch trigger indices'</span>)
+hold <span class="string">off</span>; snapnow
+</pre><img vspace="5" hspace="5" src="feature_selection_04.png" alt=""> <img vspace="5" hspace="5" src="feature_selection_05.png" alt=""> <p>label epochs as high or medium workload. no neutral workload conditions were included in this data set, and workload was segmented rather than mixed. so determine where the cutoff is to partition high and medium workload.</p><pre class="codeinput">hwl_1; <span class="comment">% first hwl trigger index</span>
+hwl_1_time = hwl_1 * 1000/fs; <span class="comment">% time of first hwl trigger</span>
+
+epoch_time = data_EPOC.EEG.times(end) - data_EPOC.EEG.times(1);
+
+epoch_change = hwl_1_time/epoch_time;  <span class="comment">% this corresponds to cutoff between medium and high workload segments.</span>
+
+<span class="comment">%  split these segments</span>
+epoch_change; <span class="comment">% 56.5</span>
+
+medium_epochs = data_EPOC.EEG.data(:,:, 1:55);
+high_epochs = data_EPOC.EEG.data(:,:, 57:end);
+</pre><h2 id="7">3 + 4: compute mean power spectral densities</h2><pre class="codeinput">pl = figure;
+<span class="keyword">for</span> chan = 1:13;  <span class="comment">% for each electrode channel</span>
+
+<span class="keyword">for</span> epoch = 1:55; <span class="comment">% for each epoch within medium workload segment</span>
+[Pxx, Freq] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),fs, <span class="string">'onesided'</span>); <span class="comment">% fs is sampling freq. 'onesided' makes all powers positive, as negative powers are not theoretically possible</span>
+p_mat_medium(:,epoch) = Pxx; <span class="comment">% storing densities for each epoch in a matrix</span>
+<span class="keyword">end</span>
+medium_pxx_mean = median(p_mat_medium,2); <span class="comment">% average powers across epochs for each frequency</span>
+
+<span class="keyword">for</span> epoch = 1:48;
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),fs, <span class="string">'onesided'</span>);
+p_mat_high(:,epoch) = Pxx;
+<span class="keyword">end</span>
+high_pxx_mean = median(p_mat_high,2);
+
+
+<span class="keyword">for</span> p = 1:13;
+subplot(5,3,chan); hold <span class="string">on</span>;
+p = plot(Freq(1:33),medium_pxx_mean(1:33));
+p2 = plot(Freq(1:33),high_pxx_mean(1:33));
+set(p,<span class="string">'Color'</span>,<span class="string">'b'</span>);
+set(p2,<span class="string">'Color'</span>,<span class="string">'r'</span>);
+title(labels(chan));
+xlim([0 32]);
+ylabel(<span class="string">'uV / HZ'</span>);
+xlabel(<span class="string">'Hz'</span>);
+legend (<span class="string">'Medium Workload'</span>, <span class="string">'High Workload'</span>);
+hold <span class="string">off</span>;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+    set(pl, <span class="string">'Units'</span>, <span class="string">'Normalized'</span>, <span class="string">'OuterPosition'</span>, [0, 0.04, 1, 0.96]);
+    figure(pl)
+    sgtitle(<span class="string">'Power Spectral Densities'</span>);
+    snapnow
+
+<span class="comment">% not any visually salient effects of workload. Low frequency differences</span>
+<span class="comment">% may be accounted for by movement induced by high workload scenarios.</span>
+<span class="comment">% Delta oscillations are sensitive to neck and jaw muscle tension which</span>
+<span class="comment">% would be prevalent in the current study as natural movements were</span>
+<span class="comment">% encouraged.</span>
+</pre><img vspace="5" hspace="5" src="feature_selection_06.png" alt=""> <h2 id="8">Visualize power spectral densities without delta.</h2><p>Delta was identified as a likely source of noise due to jaw clenching and head movements. Removing delta will refine the scale on the plots and may help identify patterns.</p><pre class="codeinput">pl = figure;
+<span class="keyword">for</span> chan = 1:13;
+
+<span class="keyword">for</span> epoch = 1:55;
+[Pxx] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),128, <span class="string">'onesided'</span>);
+p_mat_medium(:,epoch) = Pxx;
+<span class="keyword">end</span>
+medium_pxx_mean = median(p_mat_medium,2);
+
+<span class="keyword">for</span> epoch = 1:48
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),128, <span class="string">'onesided'</span>);
+p_mat_high(:,epoch) = Pxx;
+<span class="keyword">end</span>
+high_pxx_mean = median(p_mat_high,2);
+
+
+<span class="keyword">for</span> p = 1:13;
+subplot(5,3,chan); hold <span class="string">on</span>;
+p = plot(Freq(5:33),medium_pxx_mean(5:33));
+p2 = plot(Freq(5:33),high_pxx_mean(5:33));
+set(p,<span class="string">'Color'</span>,<span class="string">'b'</span>);
+set(p2,<span class="string">'Color'</span>,<span class="string">'r'</span>);
+title(labels(chan));
+xlim([4 32]);
+ylabel(<span class="string">'uV / HZ'</span>);
+xlabel(<span class="string">'Frequency(Hz)'</span>);
+legend (<span class="string">'Medium Workload'</span>, <span class="string">'High Workload'</span>);
+hold <span class="string">off</span>;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+    set(pl, <span class="string">'Units'</span>, <span class="string">'Normalized'</span>, <span class="string">'OuterPosition'</span>, [0, 0.04, 1, 0.96]);
+    figure(pl)
+    sgtitle(<span class="string">'Power Spectral Densities'</span>)
+    snapnow
+<span class="comment">% Still no obvious patterns between workload and power density.</span>
+</pre><img vspace="5" hspace="5" src="feature_selection_07.png" alt=""> <h2 id="9">Stage 1 of feature reduction.</h2><pre class="codeinput"><span class="comment">%* REMOVE 02: Electrode O2 is displaying peculiar behaviour, non representative of</span>
+<span class="comment">% regular EEG.</span>
+<span class="comment">% Fascinatingly, this may be a good index of workload, such as eye movement / head movement artifacts brought on by increased workload.</span>
+<span class="comment">% However it is likely not the source of brain activity we are interested in so will remove this electrode.</span>
+<span class="comment">%</span>
+<span class="comment">%* REMOVE delta: Frequencies below 4 HZ are susceptible to movement artifacts and jaw clenching.</span>
+<span class="comment">% This is a large concern in the current study as regular movement was encouraged to obtain better ecological validity.</span>
+</pre><h2 id="10">Perform stepwise logistic regression for variable selection</h2><div><ul><li>structure data</li></ul></div><pre class="codeinput">medium_rows = [];
+<span class="keyword">for</span> chan = [1:7, 9:13]; <span class="comment">% O2 is #8</span>
+
+<span class="keyword">for</span> epoch = 1:55;
+[Pxx] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),128, <span class="string">'onesided'</span>);
+medium_rows(size(medium_rows,1)+1, :) = [Pxx(2:33)', chan, 0];
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+high_rows = [];
+<span class="keyword">for</span> chan = [1:7, 9:13];
+
+<span class="keyword">for</span> epoch = 1:48;
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),128, <span class="string">'onesided'</span>);
+high_rows(size(high_rows,1)+1, :) = [Pxx(2:33)', chan, 1];
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+full = [medium_rows ; high_rows];
+
+<span class="comment">% * Create sub-band frequency bins averages.</span>
+<span class="comment">% This will reduce the amount of predictor variables and 1 Hz bins aren't commonly computed in EEG research.</span>
+<span class="comment">% Sub-band ranges, e.g. low alpha &amp; high alpha are often used to bin similar patterns of activity.</span>
+<span class="comment">% There is initially a lot of computational demand when evaluating each 1:32 frequency and their interactions.</span>
+<span class="comment">% So feature reduction is necessary for this reason as well.</span>
+
+
+freq_bins(:,1) = mean(full(:,4:5),2);
+freq_bins(:,2) = mean(full(:,6:8),2);
+freq_bins(:,3) = mean(full(:,8:9),2);
+freq_bins(:,4) = mean(full(:,9:10),2);
+freq_bins(:,5) = mean(full(:,11:12),2);
+freq_bins(:,6) = mean(full(:,12:15),2);
+freq_bins(:,7) = mean(full(:,16:19),2);
+freq_bins(:,8) = mean(full(:,20:23),2);
+freq_bins(:,9) = mean(full(:,24:27),2);
+freq_bins(:,10) = mean(full(:,28:32),2);
+freq_bins(:,11:12) = full(:,33:34);
+
+    var_names = {<span class="string">'LowTheta'</span>,<span class="string">'HighTheta'</span>, <span class="string">'LowAlpha'</span>, <span class="string">'MidAlpha'</span>, <span class="string">'HighAlpha'</span>, <span class="string">'LowBeta'</span>, <span class="string">'LowBeta2'</span>, <span class="string">'MidBeta'</span>, <span class="string">'MidBeta2'</span>, <span class="string">'HighBeta'</span>,<span class="string">'electrode'</span>,<span class="string">'workload'</span>};
+
+    <span class="comment">% change to table to display variable names</span>
+    T = array2table(freq_bins, <span class="string">'VariableNames'</span>, var_names);
+
+        T.workload = categorical(T.workload);
+        T.electrode = categorical(T.electrode);
+
+            T.Properties.VariableNames = matlab.lang.makeValidName(T.Properties.VariableNames);
+
+ stepwise_model = stepwiseglm(T, <span class="string">'workload ~ electrode * (LowTheta + HighTheta + LowAlpha + MidAlpha + HighAlpha + LowBeta + LowBeta2 + MidBeta + MidBeta2 + HighBeta)'</span>,<span class="keyword">...</span>
+<span class="string">'Distribution'</span>, <span class="string">'binomial'</span>, <span class="string">'PEnter'</span>, 0.05 );
+<span class="comment">% distribution = binomial to account for having two discrete response variables.</span>
+<span class="comment">% 'PEnter' = 0.05 to remove terms from model that are above p = 0.05.</span>
+
+        pValues = cell2mat({stepwise_model.Coefficients.pValue});
+            best_features = array2table(pValues, <span class="string">'RowNames'</span>, stepwise_model.CoefficientNames);
+            best_features = sortrows(best_features(2:end,:));
+
+<span class="comment">% * Display the best performing features as per p values.</span>
+best_features(1:20,:)
+</pre><pre class="codeoutput">1. Adding LowTheta:MidBeta2, Deviance = 1030.6006, Chi2Stat = 4.8972183, PValue = 0.026899994
+2. Removing HighAlpha:electrode, Deviance = 1040, Chi2Stat = 9.398, PValue = 0.58521
+3. Adding MidAlpha:HighAlpha, Deviance = 1035.0545, Chi2Stat = 4.9440646, PValue = 0.026180401
+4. Adding LowBeta2:HighBeta, Deviance = 1031.1668, Chi2Stat = 3.8876638, PValue = 0.048642042
+5. Adding LowBeta:MidBeta2, Deviance = 1026.6721, Chi2Stat = 4.4947248, PValue = 0.033999586
+6. Adding MidAlpha:MidBeta, Deviance = 1022.696, Chi2Stat = 3.9760852, PValue = 0.046150707
+7. Removing LowBeta2:electrode, Deviance = 1033.6, Chi2Stat = 10.855, PValue = 0.45545
+8. Removing LowBeta:electrode, Deviance = 1045.1, Chi2Stat = 11.592, PValue = 0.39507
+9. Removing LowAlpha:electrode, Deviance = 1056.7, Chi2Stat = 11.553, PValue = 0.39819
+10. Removing LowAlpha, Deviance = 1057.6, Chi2Stat = 0.93575, PValue = 0.33337
+11. Removing LowTheta:electrode, Deviance = 1072.6, Chi2Stat = 15.013, PValue = 0.18191
+12. Removing MidAlpha:electrode, Deviance = 1087.7, Chi2Stat = 15.02, PValue = 0.18158
+13. Removing HighBeta:electrode, Deviance = 1103.5, Chi2Stat = 15.806, PValue = 0.14851
+14. Adding MidBeta:HighBeta, Deviance = 1098.2499, Chi2Stat = 5.2204129, PValue = 0.02232325
+15. Removing MidAlpha:MidBeta, Deviance = 1099.6, Chi2Stat = 1.3226, PValue = 0.25013
+16. Removing MidAlpha:HighAlpha, Deviance = 1100.9, Chi2Stat = 1.3432, PValue = 0.24646
+17. Removing HighAlpha, Deviance = 1101.5, Chi2Stat = 0.54856, PValue = 0.45891
+18. Removing MidAlpha, Deviance = 1103.7, Chi2Stat = 2.2043, PValue = 0.13763
+
+ans =
+
+  20&times;1 table
+
+                               pValues  
+                              __________
+
+    HighBeta                  1.2607e-14
+    LowBeta2                  5.6765e-10
+    LowBeta                   1.3342e-07
+    LowBeta2:HighBeta         1.1215e-06
+    LowTheta:MidBeta2         5.8558e-06
+    LowTheta                  3.0546e-05
+    LowBeta:MidBeta2          0.00043079
+    MidBeta                    0.0034471
+    MidBeta:HighBeta           0.0043578
+    MidBeta2                   0.0055458
+    electrode_5                0.0063687
+    MidBeta2:electrode_9        0.016628
+    MidBeta:electrode_13        0.036841
+    MidBeta2:electrode_5         0.04278
+    HighTheta:electrode_10      0.044941
+    MidBeta:electrode_10        0.065816
+    MidBeta2:electrode_6        0.076107
+    MidBeta:electrode_2          0.10788
+    MidBeta2:electrode_13        0.11899
+    MidBeta2:electrode_10        0.12334
+
+</pre><h2 id="11">Next steps</h2><p>These features will be used in a machine learning model. I will explore how classification is impacted by this method of dimension reduction. Additionally, I will evaluate if a model generalizes to other participants.</p><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Feature selection of Electroencephalography (EEG) data for workload level detection.
+%% Introduction
+% Exploring signal processing, visualization, and machine learning techniques with EEG data for MATLAB. The data is from select participants who performed
+% virtual reality flight simulations of that varied in level of difficulty throughout the flight task. 
+% I am interested in correlations between EEG data and workload (corresponding to flight difficulty)
+%
+% The EEG datasets loaded in this project were preprocessed using an automated script that implemented independent component analysis. 
+% The script labelled each 1-second window of data as either high or medium workload. The script outputted a continuous dataset that appended non-contiguous
+% epochs, that were separated due to epoch rejection. A continuous dataset was necessary for BCIlab implementation. A second dataset was created that keep data epoched. 
+% This was used to power density analysis which was used to direct EEG feature selection for machine learning model. 
+
+%% Load data from best performing subject
+data_CT = load('-mat','C:\Users\akfra\Desktop\s15_appended_CT.set'); % the continuous dataset. Going to visualize EEG from preprocessing
+
+%% Plot all electrodes EEG
+
+t=data_CT.EEG.times;
+y=data_CT.EEG.data;
+labels = {data_CT.EEG.chanlocs(:).labels};  
+
+
+p = figure;
+for i=1:13
+     subplot(7,2,i);
+     plot(t/1000,y(i,:));
+     title(labels(i));
+     ylim([-100 100]);
+     ylabel('Voltage(uV)');
+     xlabel('Time(s)');
+     sgtitle('Electroencephalograms');
+end
+set(p, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+figure(p)
+
+    snapnow
+ % plot shows there is less than 120 s of data. This is due to epoch rejection. 
+ % Electrode O2 is displaying much greater voltage deflections than other
+ % electrodes. This is likely noise - probably coming from rate of blinks,
+ % eye movements, or electrode displacement. 
+ 
+%% 1) segment data for high vs medium workload
+%
+    % I am using latency field to obtain 'trigger' times that indicate workload condition. 
+    % latency contains time indices of when a code was sent to EEG indicating high or low workload. 
+    % code '2211' corresponds to medium workload and '4422' corresponds to high. 
+
+ latency = cell2mat({data_CT.EEG.event(:).latency});
+ event = {data_CT.EEG.event(:).type};
+
+    mwl_idx = strcmp(event, '2211');
+    mwl_idx = latency(mwl_idx); % number of timepoints from beginning of recording.
+    mwl_1 = mwl_idx(1);
+    mwl_end = mwl_idx(end);
+
+    hwl_idx = strcmp(event, '4422');
+    hwl_idx = latency(hwl_idx);
+    hwl_1 = hwl_idx(1);
+    hwl_end = hwl_idx(end);
+ 
+ 
+ %  Display time segmentation
+ 
+ p = figure; 
+ subplot(7,2,1);
+ 
+ text( 0.35,0.15,'Medium Workload', 'color', '#EDB120', 'FontSize', 16); axis off;
+ text( 0.385,0.8,'High Workload', 'color', '#D95319', 'FontSize', 16); axis off;
+ 
+for i=1:13;
+     subplot(7,2,i+1);
+     hold on;
+     plot(t/1000,y(i,:));
+     plot(t(mwl_1:mwl_end)/1000, y(i, mwl_1:mwl_end),'color','#EDB120');
+     plot(t(hwl_1:hwl_end)/1000, y(i, hwl_1:hwl_end), 'color', '#D95319');
+     title(labels(i));
+     ylim([-100 100]);
+     ylabel('Voltage(uV)');
+     xlabel('Time(s)');
+     sgtitle('Electroencephalograms and workload segments');
+     hold off;
+end
+
+    set(p, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    figure(p)
+    snapnow
+   
+  % The workload conditions are segmented and roughly balanced. There is slightly more time spent in medium workload.  
+%%    Evaluate power spectral density differences at each electrode. 
+    % 'Continuous' dataset is actually sampled from different time points, so oscillations being examined get interupted.
+    %
+    % Therefore: 
+    %
+    % * 1) import epoched data. 
+    %
+    % * 2) index high and medium workload epochs.
+    %
+    % * 3) compute densities for each epoch.
+    %
+    % * 4) average across epochs for each workload level.
+%
+%
+% * 1) Load epoched data from a good performing subject. (R project 'EEG power densities' explores this topic).
+
+data_EPOC = load('-mat','C:\Users\akfra\Desktop\s15_appended_EPOC.set'); 
+
+% 2) index high and medium workload epochs
+
+labels = {data_EPOC.EEG.chanlocs(:).labels};  
+ 
+% determine sampling rate
+figure; plot(diff(data_EPOC.EEG.times), '.')
+title('Time difference between successive points');
+max(diff(data_EPOC.EEG.times)) - min(diff(data_EPOC.EEG.times));
+fs = 1000/mean(diff(data_EPOC.EEG.times));
+
+% plot times for hwl and mwl events. Determine how I will partition them.
+figure; hold on;
+plot(latency);
+
+mwl_pts = ismember(event, '2211'); 
+hwl_pts = ismember(event, '4422'); 
+
+x_mwl = find(ismember(event, '2211'));
+x_hwl = find(ismember(event, '4422'));
+
+plot(x_hwl, latency(hwl_pts),'*');
+plot(x_mwl, latency(mwl_pts),'*')
+
+title('Workload epoch trigger indices')
+hold off; snapnow
+%%
+% label epochs as high or medium workload.
+% no neutral workload conditions were included in this data set, and
+% workload was segmented rather than mixed. so determine where the cutoff
+% is to partition high and medium workload.
+
+hwl_1; % first hwl trigger index
+hwl_1_time = hwl_1 * 1000/fs; % time of first hwl trigger
+
+epoch_time = data_EPOC.EEG.times(end) - data_EPOC.EEG.times(1);
+
+epoch_change = hwl_1_time/epoch_time;  % this corresponds to cutoff between medium and high workload segments. 
+
+%  split these segments
+epoch_change; % 56.5
+
+medium_epochs = data_EPOC.EEG.data(:,:, 1:55); 
+high_epochs = data_EPOC.EEG.data(:,:, 57:end);
+%% 3 + 4: compute mean power spectral densities
+
+pl = figure; 
+for chan = 1:13;  % for each electrode channel
+    
+for epoch = 1:55; % for each epoch within medium workload segment
+[Pxx, Freq] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),fs, 'onesided'); % fs is sampling freq. 'onesided' makes all powers positive, as negative powers are not theoretically possible
+p_mat_medium(:,epoch) = Pxx; % storing densities for each epoch in a matrix
+end
+medium_pxx_mean = median(p_mat_medium,2); % average powers across epochs for each frequency
+
+for epoch = 1:48;
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),fs, 'onesided');
+p_mat_high(:,epoch) = Pxx;
+end
+high_pxx_mean = median(p_mat_high,2);
+
+
+for p = 1:13;
+subplot(5,3,chan); hold on; 
+p = plot(Freq(1:33),medium_pxx_mean(1:33));
+p2 = plot(Freq(1:33),high_pxx_mean(1:33));
+set(p,'Color','b');
+set(p2,'Color','r');
+title(labels(chan));
+xlim([0 32]);
+ylabel('uV / HZ');
+xlabel('Hz');
+legend ('Medium Workload', 'High Workload');
+hold off;
+end
+end
+    
+    set(pl, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    figure(pl)
+    sgtitle('Power Spectral Densities');
+    snapnow
+
+% not any visually salient effects of workload. Low frequency differences
+% may be accounted for by movement induced by high workload scenarios.
+% Delta oscillations are sensitive to neck and jaw muscle tension which
+% would be prevalent in the current study as natural movements were
+% encouraged.
+
+%% Visualize power spectral densities without delta.
+% Delta was identified as a likely source of noise due to jaw clenching and head movements. 
+% Removing delta will refine the scale on the plots and may help identify patterns.
+
+pl = figure; 
+for chan = 1:13;
+    
+for epoch = 1:55;
+[Pxx] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),128, 'onesided');
+p_mat_medium(:,epoch) = Pxx;
+end
+medium_pxx_mean = median(p_mat_medium,2);
+
+for epoch = 1:48
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),128, 'onesided');
+p_mat_high(:,epoch) = Pxx;
+end
+high_pxx_mean = median(p_mat_high,2);
+
+
+for p = 1:13;
+subplot(5,3,chan); hold on; 
+p = plot(Freq(5:33),medium_pxx_mean(5:33));
+p2 = plot(Freq(5:33),high_pxx_mean(5:33));
+set(p,'Color','b');
+set(p2,'Color','r');
+title(labels(chan));
+xlim([4 32]);
+ylabel('uV / HZ');
+xlabel('Frequency(Hz)');
+legend ('Medium Workload', 'High Workload');
+hold off;
+end
+end
+
+    set(pl, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    figure(pl)
+    sgtitle('Power Spectral Densities')
+    snapnow
+% Still no obvious patterns between workload and power density.
+
+%% Stage 1 of feature reduction.
+%* REMOVE 02: Electrode O2 is displaying peculiar behaviour, non representative of
+% regular EEG. 
+% Fascinatingly, this may be a good index of workload, such as eye movement / head movement artifacts brought on by increased workload.
+% However it is likely not the source of brain activity we are interested in so will remove this electrode.
+%
+%* REMOVE delta: Frequencies below 4 HZ are susceptible to movement artifacts and jaw clenching. 
+% This is a large concern in the current study as regular movement was encouraged to obtain better ecological validity. 
+
+%% Perform stepwise logistic regression for variable selection 
+%
+% * structure data
+medium_rows = [];
+for chan = [1:7, 9:13]; % O2 is #8
+    
+for epoch = 1:55;
+[Pxx] = periodogram(medium_epochs(chan,:,epoch),[],length(medium_epochs),128, 'onesided');
+medium_rows(size(medium_rows,1)+1, :) = [Pxx(2:33)', chan, 0]; 
+end
+end
+
+high_rows = [];
+for chan = [1:7, 9:13];
+    
+for epoch = 1:48;
+[Pxx] = periodogram(high_epochs(chan,:,epoch),[],length(high_epochs),128, 'onesided');
+high_rows(size(high_rows,1)+1, :) = [Pxx(2:33)', chan, 1];
+end
+end
+
+full = [medium_rows ; high_rows]; 
+
+% * Create sub-band frequency bins averages.  
+% This will reduce the amount of predictor variables and 1 Hz bins aren't commonly computed in EEG research. 
+% Sub-band ranges, e.g. low alpha & high alpha are often used to bin similar patterns of activity. 
+% There is initially a lot of computational demand when evaluating each 1:32 frequency and their interactions.
+% So feature reduction is necessary for this reason as well.
+
+
+freq_bins(:,1) = mean(full(:,4:5),2);
+freq_bins(:,2) = mean(full(:,6:8),2);
+freq_bins(:,3) = mean(full(:,8:9),2);
+freq_bins(:,4) = mean(full(:,9:10),2);
+freq_bins(:,5) = mean(full(:,11:12),2);
+freq_bins(:,6) = mean(full(:,12:15),2);
+freq_bins(:,7) = mean(full(:,16:19),2);
+freq_bins(:,8) = mean(full(:,20:23),2);
+freq_bins(:,9) = mean(full(:,24:27),2);
+freq_bins(:,10) = mean(full(:,28:32),2);
+freq_bins(:,11:12) = full(:,33:34);
+
+    var_names = {'LowTheta','HighTheta', 'LowAlpha', 'MidAlpha', 'HighAlpha', 'LowBeta', 'LowBeta2', 'MidBeta', 'MidBeta2', 'HighBeta','electrode','workload'};
+
+    % change to table to display variable names
+    T = array2table(freq_bins, 'VariableNames', var_names);
+
+        T.workload = categorical(T.workload);
+        T.electrode = categorical(T.electrode);
+
+            T.Properties.VariableNames = matlab.lang.makeValidName(T.Properties.VariableNames);
+
+ stepwise_model = stepwiseglm(T, 'workload ~ electrode * (LowTheta + HighTheta + LowAlpha + MidAlpha + HighAlpha + LowBeta + LowBeta2 + MidBeta + MidBeta2 + HighBeta)',...
+'Distribution', 'binomial', 'PEnter', 0.05 );
+% distribution = binomial to account for having two discrete response variables.
+% 'PEnter' = 0.05 to remove terms from model that are above p = 0.05.
+
+        pValues = cell2mat({stepwise_model.Coefficients.pValue});
+            best_features = array2table(pValues, 'RowNames', stepwise_model.CoefficientNames);
+            best_features = sortrows(best_features(2:end,:));
+
+% * Display the best performing features as per p values.            
+best_features(1:20,:)
+
+
+%% Next steps
+% These features will be used in a machine learning model. I will explore
+% how classification is impacted by this method of dimension reduction.
+% Additionally, I will evaluate if a model generalizes to other
+% participants. 
+##### SOURCE END #####
+--></body></html>
