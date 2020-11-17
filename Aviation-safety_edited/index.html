@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Aviation Risk Factors</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/kePrint-0.0.1/kePrint.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="table-style.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+  <div class="container-fluid main-container">
+
+
+
+
+    <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../index.html">Home</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li>
+              <a href="../../R_EEG_Power_Densities/index.html">EEG power densities with R</a>
+            </li>
+            <li>
+      <a href="../../MATLAB-EEG-Feature-Extraction/html/feature_selection.html">EEG Feature Selection with MATLAB</a>
+    </li>
+    
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div><!--/.container -->
+    </div><!--/.navbar -->
+    
+    <div class="fluid-row" id="header">
+
+
+<h1 class="title toc-ignore">Aviation Risk Factors</h1>
+
+</div>
+
+
+<div id="packages-used" class="section level6">
+<h6>Packages used</h6>
+<pre class="r"><code>pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, gt, tidyverse, glue, formattable, kableExtra, imager, reshape2, gridExtra)</code></pre>
+</div>
+<div id="how-much-more-dangerous-is-general-aviation-than-commerical-or-commuter-flight" class="section level3">
+<h3>How much more dangerous is General Aviation than Commerical or Commuter flight?</h3>
+<p>I obtained data from <a href="https://www.bts.gov/content/us-general-aviationa-safety-data">link</a> the American Bureau of Transportation Statistics (BTS). The BTS have been required by law to investigate and report public use accidents since 1995. Their data is accessible, free and transparent, so I selected it as a reliable source of data.</p>
+<p>**note: General aviation (GA) is defined as non-military and non scheduled flight. GA typically involves smaller aircrafts and often for recreation and private transport.</p>
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre><code>## Image. Width: 1200 pix Height: 798 pix Depth: 1 Colour channels: 3</code></pre>
+<div id="datasets" class="section level4">
+<h4>Datasets</h4>
+<ol style="list-style-type: decimal">
+<li>U.S. Air Carrier Safety Data: Includes all scheduled and nonscheduled service accidents involving all-cargo carriers and commercial operators of large aircraft when those accidents occurred during 14 CFR 121 operations.</li>
+<li>U.S. General Aviation Safety Data: U.S. registered civil aircraft not operated under 14 CFR 121 or 14 CFR 135. Accidents on foreign soil and in foreign waters are excluded.</li>
+</ol>
+</div>
+</div>
+<div id="importing-data-and-structuring-tables." class="section level3">
+<h3>Importing data and structuring tables.</h3>
+<div id="evaluate-the-unmodified-data-stucture" class="section level5">
+<h5>Evaluate the unmodified data stucture</h5>
+<pre class="r"><code>comm_url &lt;- &quot;https://www.bts.gov/sites/bts.dot.gov/files/table_02_09_121819.xlsx&quot; 
+filename = (paste((getwd()),&quot;/comm_data_table.xlsx&quot;, sep = &quot;&quot;))
+invisible(download.file(url = comm_url, destfile = filename, mode=&#39;wb&#39;))
+
+comm_data &lt;- read.xlsx(filename, startRow = 2, colNames = TRUE, rowNames = FALSE) 
+      comm_data &lt;- comm_data[1:22,] ## data ends on row 24. It is followed by paragprahs of annotations
+          comm_data &lt;- as.matrix(comm_data)
+          rn &lt;- comm_data[,1]
+          rownames(comm_data) &lt;- rn
+          comm_data &lt;- comm_data[,2:ncol(comm_data)]
+
+                  comm_transpose &lt;- as.data.frame(t(as.matrix(comm_data)))
+                  comm_transpose$year &lt;- rownames(comm_transpose)
+                  comm_transpose &lt;- comm_transpose[2:nrow(comm_transpose),]
+                  comm_transpose &lt;- comm_transpose[comm_transpose$year &gt;= 2000,]
+                  
+                      df_comm_transpose &lt;- as.data.frame(comm_transpose)
+                      df_comm_transpose_numeric &lt;- data.frame(lapply(df_comm_transpose, function(x) as.numeric(as.character(x)))) # change variables from factors to numeric
+
+comm_fatality_rate &lt;- c(df_comm_transpose_numeric$Total.accidents..fatal.2)
+
+head(df_comm_transpose_numeric)</code></pre>
+<pre><code>##   Total.fatalities Total.seriously.injured.persons Total.accidents
+## 1               92                              31              56
+## 2              531                              19              46
+## 3                0                              24              41
+## 4               22                              31              54
+## 5               14                              20              30
+## 6               22                              14              40
+##   Fatal.accidents Aircraft.miles..millions.
+## 1               3                  7524.027
+## 2               6                  7294.191
+## 3               0                  7192.501
+## 4               2                  7280.383
+## 5               2                  7930.159
+## 6               3                  8165.643
+##   Rates.per.100.million.aircraft.miles Fatalities Seriously.injured.persons
+## 1                                   NA  1.2227490                 0.4120134
+## 2                                   NA  7.2797660                 0.2604813
+## 3                                   NA  0.0000000                 0.3336809
+## 4                                   NA  0.3021819                 0.4258018
+## 5                                   NA  0.1765412                 0.2522018
+## 6                                   NA  0.2694215                 0.1714501
+##   Total.accidents.1 Total.accidents..fatal Aircraft.departures..thousands.
+## 1         0.7442823             0.03987227                        11468.23
+## 2         0.6306388             0.08225724                        10954.83
+## 3         0.5700382             0.00000000                        10508.47
+## 4         0.7417192             0.02747108                        10433.16
+## 5         0.3783026             0.02522018                        11023.13
+## 6         0.4898573             0.03673930                        11130.41
+##   Rates.per.100.000.aircraft.departures Fatalities.1
+## 1                                    NA    0.8022163
+## 2                                    NA    4.8471760
+## 3                                    NA    0.0000000
+## 4                                    NA    0.2108660
+## 5                                    NA    0.1270057
+## 6                                    NA    0.1976567
+##   Seriously.injured.persons.1 Total.accidents.2 Total.accidents..fatal.1
+## 1                   0.2703120         0.4883056               0.02615923
+## 2                   0.1734394         0.4199060               0.05477035
+## 3                   0.2283871         0.3901613               0.00000000
+## 4                   0.2971294         0.5175803               0.01916964
+## 5                   0.1814367         0.2721551               0.01814367
+## 6                   0.1257816         0.3593759               0.02695319
+##   Flight.hours..thousands. Rates.per.100.000.flight.hours Fatalities.2
+## 1                 18299.26                             NA   0.50275270
+## 2                 17814.19                             NA   2.98077000
+## 3                 17290.20                             NA   0.00000000
+## 4                 17467.70                             NA   0.12594670
+## 5                 18882.50                             NA   0.07414271
+## 6                 19390.03                             NA   0.11346040
+##   Seriously.injured.persons.2 Total.accidents.3 Total.accidents..fatal.2 year
+## 1                  0.16940580         0.3060234               0.01639411 2000
+## 2                  0.10665650         0.2582211               0.03368101 2001
+## 3                  0.13880700         0.2371286               0.00000000 2002
+## 4                  0.17747040         0.3091420               0.01144970 2003
+## 5                  0.10591820         0.1588772               0.01059182 2004
+## 6                  0.07220206         0.2062916               0.01547187 2005</code></pre>
+</div>
+<div id="format-the-table." class="section level4">
+<h4>Format the table.</h4>
+<p>The above table is not very readable an imported. I am going to re-format using American Psychological Association (APA) format. I needed to use a Cascading Style Sheet file (CSS) to specify the style formats. The CSS file was called on in my rmarkdown script.</p>
+<p>I selected the data that corresponds to the nnumber of fatal accidents per 100 thousand hours of flight. Fatality accidents per time is the metric I am interested in, because they more closely corresponds to pilot error, which I am hoping we can have control over and can correct to some extent. Total fatalities on the other hand can be more closely related to number of passengers. A lot of fatalities can occur with very few pilot errors, and there is less room to improve pilot performance. Improvements would likely be seen adjusting other parameters, such as passenger capacity, distance of flight etc.</p>
+<pre class="r"><code>colnames(df_comm_transpose_numeric) &lt;- c(&#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;, &#39;Fatal Accidents&#39;, &#39;Aircraft miles(mill)&#39;,&#39;Rate/mill miles&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;, &#39;Fatal Accidents&#39;,&#39;Aircraft Departures&#39;,&#39;rates 1000&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;,&#39;Fatal Accidents&#39;, &#39;Flight hours&#39;, &#39;Rates per 100 hours&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;,&#39;Accidents&#39;, &#39;Fatal Accidents&#39;, &#39;Year&#39; )
+
+table_function &lt;- function(table, caption, note){kable(table, format = &quot;html&quot;,col.names = colnames(table), align = c(rep(&quot;c&quot;, times = ncol(table))),
+      caption = caption) %&gt;%
+  kable_styling(full_width = TRUE) %&gt;%
+  row_spec(row = 0, align = &quot;c&quot;) %&gt;%
+  footnote(general_title = &quot;Note.&quot;, general = note,
+           footnote_as_chunk = TRUE)}
+
+table &lt;- df_comm_transpose_numeric[, 19:ncol(df_comm_transpose_numeric)] # these columns are variables that correspond to rates per 100 thousand hours of flight. 
+
+caption &lt;- &quot;Commercial aviation safety statistics. Values per 100 thousand hours of flight&quot;
+
+note &lt;- &quot;These statistics were obtained from the US Beareau of Transportation Statistics&quot;
+
+table_function(table, caption, note)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+Commercial aviation safety statistics. Values per 100 thousand hours of flight
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;text-align: center;">
+Fatalities
+</th>
+<th style="text-align:center;text-align: center;">
+Injured persons
+</th>
+<th style="text-align:center;text-align: center;">
+Accidents
+</th>
+<th style="text-align:center;text-align: center;">
+Fatal Accidents
+</th>
+<th style="text-align:center;text-align: center;">
+Year
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+0.5027527
+</td>
+<td style="text-align:center;">
+0.1694058
+</td>
+<td style="text-align:center;">
+0.3060234
+</td>
+<td style="text-align:center;">
+0.0163941
+</td>
+<td style="text-align:center;">
+2000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.9807700
+</td>
+<td style="text-align:center;">
+0.1066565
+</td>
+<td style="text-align:center;">
+0.2582211
+</td>
+<td style="text-align:center;">
+0.0336810
+</td>
+<td style="text-align:center;">
+2001
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.1388070
+</td>
+<td style="text-align:center;">
+0.2371286
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2002
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.1259467
+</td>
+<td style="text-align:center;">
+0.1774704
+</td>
+<td style="text-align:center;">
+0.3091420
+</td>
+<td style="text-align:center;">
+0.0114497
+</td>
+<td style="text-align:center;">
+2003
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0741427
+</td>
+<td style="text-align:center;">
+0.1059182
+</td>
+<td style="text-align:center;">
+0.1588772
+</td>
+<td style="text-align:center;">
+0.0105918
+</td>
+<td style="text-align:center;">
+2004
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.1134604
+</td>
+<td style="text-align:center;">
+0.0722021
+</td>
+<td style="text-align:center;">
+0.2062916
+</td>
+<td style="text-align:center;">
+0.0154719
+</td>
+<td style="text-align:center;">
+2005
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.2595622
+</td>
+<td style="text-align:center;">
+0.0467212
+</td>
+<td style="text-align:center;">
+0.1713110
+</td>
+<td style="text-align:center;">
+0.0103825
+</td>
+<td style="text-align:center;">
+2006
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0050923
+</td>
+<td style="text-align:center;">
+0.0814775
+</td>
+<td style="text-align:center;">
+0.1425856
+</td>
+<td style="text-align:center;">
+0.0050923
+</td>
+<td style="text-align:center;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0156848
+</td>
+<td style="text-align:center;">
+0.1045655
+</td>
+<td style="text-align:center;">
+0.1411634
+</td>
+<td style="text-align:center;">
+0.0104566
+</td>
+<td style="text-align:center;">
+2008
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.2950048
+</td>
+<td style="text-align:center;">
+0.1475024
+</td>
+<td style="text-align:center;">
+0.1701951
+</td>
+<td style="text-align:center;">
+0.0113463
+</td>
+<td style="text-align:center;">
+2009
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0112670
+</td>
+<td style="text-align:center;">
+0.0957693
+</td>
+<td style="text-align:center;">
+0.1690047
+</td>
+<td style="text-align:center;">
+0.0056335
+</td>
+<td style="text-align:center;">
+2010
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.1169072
+</td>
+<td style="text-align:center;">
+0.1837113
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2011
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.1015673
+</td>
+<td style="text-align:center;">
+0.1467083
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2012
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0506197
+</td>
+<td style="text-align:center;">
+0.0506197
+</td>
+<td style="text-align:center;">
+0.1293614
+</td>
+<td style="text-align:center;">
+0.0112488
+</td>
+<td style="text-align:center;">
+2013
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.0789051
+</td>
+<td style="text-align:center;">
+0.1747185
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2014
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.1338854
+</td>
+<td style="text-align:center;">
+0.1617782
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2015
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.0983926
+</td>
+<td style="text-align:center;">
+0.1639877
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2016
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+0.1022529
+</td>
+<td style="text-align:center;">
+0.1722153
+</td>
+<td style="text-align:center;">
+0.0000000
+</td>
+<td style="text-align:center;">
+2017
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+0.0051845
+</td>
+<td style="text-align:center;">
+0.1296123
+</td>
+<td style="text-align:center;">
+0.1555347
+</td>
+<td style="text-align:center;">
+0.0051845
+</td>
+<td style="text-align:center;">
+2018
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<span style="font-style: italic;">Note.</span> <sup></sup> These statistics were obtained from the US Beareau of Transportation Statistics
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="display-the-table-for-general-aviation" class="section level4">
+<h4>Display the table for General Aviation</h4>
+<pre class="r"><code>GA_url &lt;- &quot;https://www.bts.gov/sites/bts.dot.gov/files/table_02_14_121819.xlsx&quot; ## downloading commercial accident data from Bureau of Transportation Statistics (US)
+filename = (paste((getwd()),&quot;/GA_data_table.xlsx&quot;, sep = &quot;&quot;))
+download.file(url = GA_url, destfile = filename, mode=&#39;wb&#39;)
+
+GA_data &lt;- read.xlsx(filename, startRow = 2, colNames = TRUE, rowNames = FALSE)
+  GA_data &lt;- GA_data[1:10,]
+    GA_data &lt;- as.matrix(GA_data)
+    rn &lt;- GA_data[,1]
+    rownames(GA_data) &lt;- rn
+    GA_data &lt;- GA_data[,2:ncol(GA_data)]
+
+        GA_transpose &lt;- as.data.frame(t(as.matrix(GA_data)))
+        GA_transpose$year &lt;- rownames(GA_transpose)
+        GA_transpose &lt;- GA_transpose[2:nrow(GA_transpose),]
+        GA_transpose$year &lt;- rownames(GA_transpose)
+        GA_transpose &lt;- GA_transpose[GA_transpose$year &gt;= 2000,]
+
+            df_GA_transpose &lt;- as.data.frame(GA_transpose)
+            df_GA_transpose_numeric &lt;- data.frame(lapply(df_GA_transpose, 
+                  function(x) as.numeric(as.character(x))))  # change variables from factors to numeric
+
+GA_fatality_rate &lt;- c(df_GA_transpose_numeric$Total.accidents..fatala.b) </code></pre>
+<pre class="r"><code>df_GA_transpose_numeric &lt;- df_GA_transpose_numeric[,7:11]
+colnames(df_GA_transpose_numeric) &lt;- c(&#39;Fatalities&#39;,&#39;Injured persons&#39;,&#39;Accidents&#39;, 
+                                       &#39;Fatal Accidents&#39;, &#39;Year&#39;)
+
+table &lt;- df_GA_transpose_numeric
+
+caption &lt;- &quot;General Aviation safety statistics. Values per 100 thousand hours of flight&quot;
+
+note &lt;- &quot;These statistics were obtained from the US Beareau of Transportation Statistics&quot;
+
+table_function(table, caption, note)</code></pre>
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<caption>
+General Aviation safety statistics. Values per 100 thousand hours of flight
+</caption>
+<thead>
+<tr>
+<th style="text-align:center;text-align: center;">
+Fatalities
+</th>
+<th style="text-align:center;text-align: center;">
+Injured persons
+</th>
+<th style="text-align:center;text-align: center;">
+Accidents
+</th>
+<th style="text-align:center;text-align: center;">
+Fatal Accidents
+</th>
+<th style="text-align:center;text-align: center;">
+Year
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+2.140958
+</td>
+<td style="text-align:center;">
+1.1135860
+</td>
+<td style="text-align:center;">
+6.573748
+</td>
+<td style="text-align:center;">
+1.2141680
+</td>
+<td style="text-align:center;">
+2000
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.213921
+</td>
+<td style="text-align:center;">
+1.2661710
+</td>
+<td style="text-align:center;">
+6.779394
+</td>
+<td style="text-align:center;">
+1.2740860
+</td>
+<td style="text-align:center;">
+2001
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.274418
+</td>
+<td style="text-align:center;">
+1.1626540
+</td>
+<td style="text-align:center;">
+6.690155
+</td>
+<td style="text-align:center;">
+1.3270700
+</td>
+<td style="text-align:center;">
+2002
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.434896
+</td>
+<td style="text-align:center;">
+1.2424510
+</td>
+<td style="text-align:center;">
+6.681540
+</td>
+<td style="text-align:center;">
+1.3424630
+</td>
+<td style="text-align:center;">
+2003
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.246062
+</td>
+<td style="text-align:center;">
+1.0647700
+</td>
+<td style="text-align:center;">
+6.493089
+</td>
+<td style="text-align:center;">
+1.2616520
+</td>
+<td style="text-align:center;">
+2004
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.430106
+</td>
+<td style="text-align:center;">
+1.1697310
+</td>
+<td style="text-align:center;">
+7.203991
+</td>
+<td style="text-align:center;">
+1.3812330
+</td>
+<td style="text-align:center;">
+2005
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.946217
+</td>
+<td style="text-align:center;">
+1.1058750
+</td>
+<td style="text-align:center;">
+6.347302
+</td>
+<td style="text-align:center;">
+1.2811450
+</td>
+<td style="text-align:center;">
+2006
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.082400
+</td>
+<td style="text-align:center;">
+1.0705890
+</td>
+<td style="text-align:center;">
+6.935736
+</td>
+<td style="text-align:center;">
+1.2007390
+</td>
+<td style="text-align:center;">
+2007
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.174995
+</td>
+<td style="text-align:center;">
+1.1357330
+</td>
+<td style="text-align:center;">
+6.867021
+</td>
+<td style="text-align:center;">
+1.2146650
+</td>
+<td style="text-align:center;">
+2008
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.305642
+</td>
+<td style="text-align:center;">
+1.3086080
+</td>
+<td style="text-align:center;">
+7.075110
+</td>
+<td style="text-align:center;">
+1.3181950
+</td>
+<td style="text-align:center;">
+2009
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.111727
+</td>
+<td style="text-align:center;">
+1.1803540
+</td>
+<td style="text-align:center;">
+6.630270
+</td>
+<td style="text-align:center;">
+1.2402940
+</td>
+<td style="text-align:center;">
+2010
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+NA
+</td>
+<td style="text-align:center;">
+2011
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.097601
+</td>
+<td style="text-align:center;">
+1.1828940
+</td>
+<td style="text-align:center;">
+7.039895
+</td>
+<td style="text-align:center;">
+1.3026200
+</td>
+<td style="text-align:center;">
+2012
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.000784
+</td>
+<td style="text-align:center;">
+1.0978660
+</td>
+<td style="text-align:center;">
+6.258864
+</td>
+<td style="text-align:center;">
+1.1183870
+</td>
+<td style="text-align:center;">
+2013
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+2.151153
+</td>
+<td style="text-align:center;">
+1.2030140
+</td>
+<td style="text-align:center;">
+6.229167
+</td>
+<td style="text-align:center;">
+1.2998670
+</td>
+<td style="text-align:center;">
+2014
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.837085
+</td>
+<td style="text-align:center;">
+1.2052830
+</td>
+<td style="text-align:center;">
+5.851457
+</td>
+<td style="text-align:center;">
+1.0983630
+</td>
+<td style="text-align:center;">
+2015
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.809340
+</td>
+<td style="text-align:center;">
+0.9327944
+</td>
+<td style="text-align:center;">
+5.934260
+</td>
+<td style="text-align:center;">
+0.9843559
+</td>
+<td style="text-align:center;">
+2016
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.525155
+</td>
+<td style="text-align:center;">
+0.9491898
+</td>
+<td style="text-align:center;">
+5.672100
+</td>
+<td style="text-align:center;">
+0.9353667
+</td>
+<td style="text-align:center;">
+2017
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+1.758729
+</td>
+<td style="text-align:center;">
+1.0617000
+</td>
+<td style="text-align:center;">
+5.876280
+</td>
+<td style="text-align:center;">
+1.0293880
+</td>
+<td style="text-align:center;">
+2018
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="padding: 0; border: 0;" colspan="100%">
+<span style="font-style: italic;">Note.</span> <sup></sup> These statistics were obtained from the US Beareau of Transportation Statistics
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="plot-fatality-rates-of-general-aviation-against-commercial-flight" class="section level4">
+<h4>Plot fatality rates of General Aviation against Commercial flight</h4>
+<pre class="r"><code># construct dataframe of fatality rates and year.
+
+Values &lt;- c( comm_fatality_rate, GA_fatality_rate)
+Type &lt;- c(rep(&quot;Commercial&quot;, times= nrow(comm_transpose)), rep(&quot;General Aviation&quot;, times = nrow(comm_transpose)))
+Year &lt;- as.numeric(c(rep(comm_transpose$year, times = 2)))
+
+df &lt;- data.frame(Type, Values, Year)
+
+
+mytheme &lt;- theme(plot.title = element_text(family = &quot;Times New Roman&quot;, size = (16)), legend.title = element_blank(), 
+                 legend.text = element_text(face = &quot;italic&quot;, colour=&quot;steelblue4&quot;,family = &quot;Times New Roman&quot;, size = (12)), 
+                 axis.title = element_text(family = &quot;Times New Roman&quot;, size = (13), colour = &quot;steelblue4&quot; ),
+                 axis.text = element_text(family = &quot;Times New Roman&quot;, colour = &quot;cornflowerblue&quot;, size = (10),
+                 margin = margin(t = 0, r = 0, b = 40, l = 40)))
+
+
+df$Values[df$Type == &#39;Commercial&#39;] &lt;- df$Values[df$Type == &#39;Commercial&#39;] * 20 # modifying for double y axis plot. The y scale is divided by 20 in plot.
+
+
+p &lt;- ggplot(df, aes(Year, Values, colour = Type)) + mytheme + geom_point(size = 3) + geom_line() + ylab(&#39;Fatal Accident Rate GA&#39;) + xlab (&#39;Year&#39;) +
+      labs(title = &quot;Fatal Accidents per 100 Thousand Flight Hours(US)&quot;)  
+
+p &lt;- p +  scale_x_continuous(breaks = c(2000:2018), labels = c(df$Year[1:19])) + 
+     scale_y_continuous(breaks = seq(0, 1.5, by = 0.25), sec.axis = sec_axis(~./20, name = &quot;Fatality Rate Commerical&quot;)) 
+
+p &lt;- p +  scale_colour_manual(values=col_scheme &lt;- c(&quot;palegreen3&quot;, &quot;cornflowerblue&quot;))  
+
+p &lt;- p + theme(axis.line.y.right = element_line(color = &quot;palegreen3&quot;), axis.ticks.y.right = element_line(color = &quot;palegreen3&quot;),
+               axis.text.y.right = element_text(color = &quot;palegreen3&quot;), axis.title.y.right = element_text(color = &quot;palegreen3&quot;))
+
+p &lt;- p + theme(axis.line.y.left = element_line(color = &quot;cornflowerblue&quot;), axis.ticks.y.left = element_line(color = &quot;cornflowerblue&quot;), 
+               axis.text.y.left = element_text(color = &quot;cornflowerblue&quot;), axis.title.y.left = element_text(color = &quot;cornflowerblue&quot;))
+
+p &lt;- p + guides(colour = guide_legend(reverse = T)) + annotate(&quot;text&quot;, x = 2008, y = 0.8, label = &quot;Mean GA: 1.2 /n /t Mean Commercial: .008&quot;,
+                                                               colour = &quot;steelblue4&quot;)
+
+p</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-7-1.png" width="100%" /></p>
+<p>On average there are 15 times more accidents resulting in a death during GA flight than commercial flight. I am going to revisualize the data to make this difference more intuitive. Notice that I adjusted the scales in previous figure in order to fit both lines in the graph</p>
+<pre class="r"><code>## create data frame. This will be used as data points in barchart
+
+df &lt;- data.frame(Type, Values, Year)
+
+GA &lt;- df[df$Type == &quot;General Aviation&quot;, 2]
+COMM &lt;- df[df$Type == &quot;Commercial&quot;, 2]
+  d &lt;- data.frame(GA, COMM)
+  colnames(d)&lt;- c(&#39;General Aviation&#39;, &#39;Commercial&#39;)
+
+  m.d &lt;- melt(d)  
+
+# create values for error bars and means. place into data frame. This will give the size of barchart and the length of error bars  
+se &lt;- function(x){sd(x)/sqrt(length(x))}
+
+  ses &lt;- c(se((COMM)), se(na.omit(GA)))
+  means &lt;- c(mean((COMM)),mean(na.omit(GA)))
+  Type &lt;- unique(df$Type)
+
+dat_sum &lt;- data.frame(Type, means, ses)
+
+
+
+## format barchart
+ 
+p1 &lt;-  ggplot(dat_sum, aes(y=means,x=Type)) +  geom_bar(stat=&quot;identity&quot;,width=0.4, colour = c(&quot;palegreen3&quot;, &quot;blue&quot;), 
+       fill=c(&quot;palegreen3&quot;, &quot;cornflowerblue&quot;)) + scale_fill_manual(values=c(&quot;palegreen3&quot;, &quot;cornflowerblue&quot;)) +
+       geom_errorbar(stat=&quot;identity&quot;,width=0.2, ymin=means-ses,ymax=means+ses, size = 1.5) + theme_classic() +
+       geom_point(data = m.d, aes(variable, value), position = &quot;jitter&quot;) + labs(title = &quot;Yearly Rates per Aviation Type&quot;,
+       caption = &quot;*Note: error bars are standard errors&quot;) + ylab(&quot;Fatality Rate: Fatal Accident / 100,000 Flight Hours&quot;) + 
+       theme(axis.text=element_text(size=12), axis.title.x = element_blank())
+ 
+
+## fomart pie chart
+
+p2 &lt;-  ggplot(dat_sum, aes(x=&quot;&quot;, y=means, fill=Type))+ geom_bar(width = 1, stat = &quot;identity&quot;)
+p2 &lt;- p2 + coord_polar(theta = &quot;y&quot;) 
+  
+ blank_theme &lt;- theme_minimal()+
+  theme(
+  axis.text = element_blank(),
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank(),
+  plot.title=element_text(size=14, face=&quot;bold&quot;)
+  )
+
+p2 &lt;- p2 + blank_theme
+
+p2 &lt;- p2  + scale_fill_manual(values=c(&quot;palegreen3&quot;, &quot;cornflowerblue&quot;))
+
+grid.arrange(p1, p2, nrow = 1)</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>These charts show just how staggering the difference is in rate of fatality between the two types of aviation.</p>
+<p>The second thing we can see from the previous line graph is that perhaps fatality rates are improving in recent years for GA. This may be a result of enhance usability design and perhaps the organizing and automation of instruments lessening pilot workload.</p>
+<pre class="r"><code># construct dataframe of fatality rates and year.
+
+Values &lt;- c( comm_fatality_rate, GA_fatality_rate)
+Type &lt;- c(rep(&quot;Commercial&quot;, times= nrow(comm_transpose)), rep(&quot;General Aviation&quot;, times = nrow(comm_transpose)))
+Year &lt;- as.numeric(c(rep(comm_transpose$year, times = 2)))
+
+df &lt;- data.frame(Type, Values, Year)
+df &lt;- df[20:nrow(df),]# just evaluating GA trends
+
+df$seg&lt;- c(rep(&#39;b&#39;, times = 11), rep(&#39;g&#39;, times = 8))
+
+
+mytheme &lt;- theme(plot.title = element_text(family = &quot;Times New Roman&quot;, size = (16)), legend.title = element_blank(), 
+                 legend.position = &quot;none&quot;, legend.text = element_blank(), axis.title = element_text(family = &quot;Times New Roman&quot;, size = (13), 
+                  colour = &quot;steelblue4&quot; ), axis.text = element_text(family = &quot;Times New Roman&quot;,
+                  colour = &quot;cornflowerblue&quot;, size = (10),margin = margin(t = 0, r = 0, b = 40, l = 40)))
+
+
+p &lt;- ggplot(df, aes(Year, Values, fill = seg)) + geom_point(size = 3, colour = &quot;cornflowerblue&quot;) + geom_line(colour = &quot;cornflowerblue&quot; ) +
+     ylab(&#39;Fatal Accident Rate GA&#39;) + xlab (&#39;Year&#39;) + labs(title = &quot;Is GA getting safer over time?&quot;) + mytheme 
+
+p &lt;- p + geom_smooth(method = lm, se = T, colour = &#39;black&#39;, linetype = &quot;dashed&quot;)
+
+p</code></pre>
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" width="100%" /></p>
+<p>continue with analysis</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
