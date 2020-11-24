@@ -295,11 +295,18 @@ $(document).ready(function () {
 
 </div>
 
-
+<div id="introduction" class="section level2">
+  <h2>Introduction</h2>
+  <p>Participants performed aircraft flight simulations using virtual reality. The difficulty of flight operations was manipulated.Participants wore an Emotiv EPOC electroencephalography (EEG) headset. I am interested in evaluating possible associations between neural activity and the difficulty, or mental demand of flight.</p>
+  <p> The purpose of this project is to evaluate the EEG data and look for the main patterns of activity relating to changes in workload level. This will provide me with some direction on narrowing the data selected for machine learning classification. </p>
+  <div id="the-emotiv-epoc" class="section level3">
+  <h3>The Emotiv Epoc</h3>
+  <p>This is a 14 channel portable EEG system. Characteristics of this system benefits research looking at dynamic tasks. The photos below were taken from Duvanige et al., 2013 [link] (<a href="https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56" class="uri">https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56</a>)</p>
+  <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 <div id="packages-and-functions" class="section level4">
 <h4>Packages and functions</h4>
 <pre class="r"><code># loading the packages used
-pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, tidyverse, glue, kableExtra, reshape2, gridExtra, pheatmap, jpeg, raster, BiocManager, grDevices, imager, readbitmap)
+pacman:: p_load(httr, jsonlite, dplyr, ggplot2, knitr, kableExtra, reshape2, gridExtra, pheatmap, imager)
 
 # This function prints a table in APA format
 table_function &lt;- function(table, caption, note){kable(table, format = &quot;html&quot;,col.names = colnames(table), row.names = F, digits = 2, align = c(rep(&quot;c&quot;, times = ncol(table))),
@@ -309,19 +316,7 @@ table_function &lt;- function(table, caption, note){kable(table, format = &quot;
       footnote(general_title = &quot;Note.&quot;, general = note,
            footnote_as_chunk = TRUE)}</code></pre>
 </div>
-<div id="introduction" class="section level2">
-<h2>Introduction</h2>
-<p>Participants performed aircraft flight simulations using virtual reality. The difficulty of flight operations was manipulated.Participants wore an Emotiv EPOC electroencephalography (EEG) headset. I am interested in evaluating possible associations between neural activity and the difficulty, or mental demand of flight.</p>
-<div id="the-emotiv-epoc" class="section level3">
-<h3>The Emotiv Epoc</h3>
-<p>This is a 14 channel portable EEG system. Characteristics of this system benefits research looking at dynamic tasks. The photos below were taken from Duvanige et al., 2013 [link] (<a href="https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56" class="uri">https://biomedical-engineering-online.biomedcentral.com/articles/10.1186/1475-925X-12-56</a>)</p>
-<pre class="r"><code>par(mfrow=c(1,2))
-im &lt;- load.image(&quot;C:/Users/akfra/Documents/EPOC_IGN.jpg&quot;)
-plot(im,bty=&#39;n&#39;, xlim = c(0, 280), ylim = c(270, 0), axes = F)
 
-im &lt;- load.image(&quot;C:/Users/akfra/Documents/emotiv_channels.jpg&quot;)
-plot(im,bty=&#39;n&#39;, xlim = c(50, 600), ylim = c(700, 190), axes = F)</code></pre>
-<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="evaluate-eeg-spectral-power-densities-for-bci-feature-selection" class="section level2">
