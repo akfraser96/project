@@ -295,15 +295,10 @@ $(document).ready(function () {
 
 </div>
 
-
-<div id="packages-used" class="section level6">
-<h6>Packages used</h6>
-<pre class="r"><code>pacman:: p_load(httr, jsonlite, dplyr, openxlsx, ggplot2, knitr, tibble, gt, tidyverse, glue, formattable, kableExtra, imager, reshape2, gridExtra)</code></pre>
-</div>
 <div id="how-much-more-dangerous-is-general-aviation-than-commerical-or-commuter-flight" class="section level3">
 <h3>How much more dangerous is General Aviation than Commerical or Commuter flight?</h3>
 <p>I obtained data from <a href="https://www.bts.gov/content/us-general-aviationa-safety-data">link</a> the American Bureau of Transportation Statistics (BTS). The BTS have been required by law to investigate and report public use accidents since 1995. Their data is accessible, free and transparent, so I selected it as a reliable source of data.</p>
-<p>**note: General aviation (GA) is defined as non-military and non scheduled flight. GA typically involves smaller aircrafts and often for recreation and private transport.</p>
+<p>**note: General aviation (GA) is defined as non-military and non-scheduled flight. GA typically involves smaller aircrafts and often for recreation and private transport.</p>
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 
 <div id="datasets" class="section level4">
@@ -399,8 +394,8 @@ head(df_comm_transpose_numeric)</code></pre>
 </div>
 <div id="format-the-table." class="section level4">
 <h4>Format the table.</h4>
-<p>The above table is not very readable an imported. I am going to re-format using American Psychological Association (APA) format. I needed to use a Cascading Style Sheet file (CSS) to specify the style formats. The CSS file was called on in my rmarkdown script.</p>
-<p>I selected the data that corresponds to the nnumber of fatal accidents per 100 thousand hours of flight. Fatality accidents per time is the metric I am interested in, because they more closely corresponds to pilot error, which I am hoping we can have control over and can correct to some extent. Total fatalities on the other hand can be more closely related to number of passengers. A lot of fatalities can occur with very few pilot errors, and there is less room to improve pilot performance. Improvements would likely be seen adjusting other parameters, such as passenger capacity, distance of flight etc.</p>
+<p>The above table is not very readable as imported. I am going to re-format using American Psychological Association (APA) format. I needed to use a Cascading Style Sheet file (CSS) to specify the style formats. The CSS file was called on in my rmarkdown script.</p>
+<p>I selected the data that corresponds to the number of fatal accidents per 100 thousand hours of flight. Fatality accidents per time is the metric I am interested in, because this measure most closely corresponds to pilot error, which I am hoping we can have influence over and can correct to some extent. Total fatalities on the other hand can be more closely related to number of passengers. A lot of fatalities can occur with very few pilot errors, and there is less room to improve pilot performance. Improvements would likely be seen adjusting other parameters, such as passenger capacity, distance of flight etc.</p>
 <pre class="r"><code>colnames(df_comm_transpose_numeric) &lt;- c(&#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;, &#39;Fatal Accidents&#39;, &#39;Aircraft miles(mill)&#39;,&#39;Rate/mill miles&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;, &#39;Fatal Accidents&#39;,&#39;Aircraft Departures&#39;,&#39;rates 1000&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;, &#39;Accidents&#39;,&#39;Fatal Accidents&#39;, &#39;Flight hours&#39;, &#39;Rates per 100 hours&#39;, &#39;Fatalities&#39;,&#39;Injured persons&#39;,&#39;Accidents&#39;, &#39;Fatal Accidents&#39;, &#39;Year&#39; )
 
 table_function &lt;- function(table, caption, note){kable(table, format = &quot;html&quot;,col.names = colnames(table), align = c(rep(&quot;c&quot;, times = ncol(table))),

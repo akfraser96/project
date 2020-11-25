@@ -168,8 +168,8 @@ figure(p)
     figure(p)
     snapnow
 
-  <span class="comment">% The workload conditions are segmented and roughly balanced. There is slightly more time spent in medium workload.</span>
-</pre><img vspace="5" hspace="5" src="feature_selection_02.png" alt=""> <img vspace="5" hspace="5" src="feature_selection_03.png" alt=""> <h2 id="5">Evaluate power spectral density differences at each electrode.</h2><p>'Continuous' dataset is actually sampled from different time points, so oscillations being examined get interupted.</p><p>Therefore:</p><div><ul><li>1) import epoched data.</li></ul></div><div><ul><li>2) index high and medium workload epochs.</li></ul></div><div><ul><li>3) compute densities for each epoch.</li></ul></div><div><ul><li>4) average across epochs for each workload level.</li></ul></div><div><ul><li>1) Load epoched data from a good performing subject. (R project 'EEG power densities' explores this topic).</li></ul></div><pre class="codeinput">data_EPOC = load(<span class="string">'-mat'</span>,<span class="string">'C:\Users\akfra\Desktop\s15_appended_EPOC.set'</span>);
+  <span class="comment">% The workload conditions are segmented and roughly balanced. Meaning similar numbers of data points for medium and high workload.</span>
+</pre><img vspace="5" hspace="3" src="feature_selection_02.png" alt=""> <h2 id="5">Evaluate power spectral density differences at each electrode.</h2><p>'Continuous' dataset is actually sampled from different time points, so oscillations being examined get interupted.</p><p>Therefore, I must:</p><div><ul><li>1) import epoched data.</li></ul></div><div><ul><li>2) index high and medium workload epochs.</li></ul></div><div><ul><li>3) compute densities for each epoch.</li></ul></div><div><ul><li>4) average across epochs for each workload level.</li></ul></div><div><ul><li> <p></p><p></p>1) Load epoched data from a good performing subject. (R project 'EEG power densities' explores this topic).</li></ul></div><pre class="codeinput">data_EPOC = load(<span class="string">'-mat'</span>,<span class="string">'C:\Users\akfra\Desktop\s15_appended_EPOC.set'</span>);
 
 <span class="comment">% 2) index high and medium workload epochs</span>
 
@@ -404,13 +404,13 @@ ans =
 %% Feature selection of Electroencephalography (EEG) data for workload level detection.
 %% Introduction
 % Exploring signal processing, visualization, and machine learning techniques with EEG data for MATLAB. The data is from select participants who performed
-% virtual reality flight simulations of that varied in level of difficulty throughout the flight task. 
+% virtual reality flight simulations that varied in level of difficulty throughout the flight task. 
 % I am interested in correlations between EEG data and workload (corresponding to flight difficulty)
 %
 % The EEG datasets loaded in this project were preprocessed using an automated script that implemented independent component analysis. 
 % The script labelled each 1-second window of data as either high or medium workload. The script outputted a continuous dataset that appended non-contiguous
 % epochs, that were separated due to epoch rejection. A continuous dataset was necessary for BCIlab implementation. A second dataset was created that keep data epoched. 
-% This was used to power density analysis which was used to direct EEG feature selection for machine learning model. 
+% The epoched dataset was used for power density analysis which was used to direct EEG feature selection for a machine learning model. 
 
 %% Load data from best performing subject
 data_CT = load('-mat','C:\Users\akfra\Desktop\s15_appended_CT.set'); % the continuous dataset. Going to visualize EEG from preprocessing
@@ -487,11 +487,11 @@ end
     figure(p)
     snapnow
    
-  % The workload conditions are segmented and roughly balanced. There is slightly more time spent in medium workload.  
+  % The workload conditions are segmented and roughly balanced, meaning similar numbers of data points for medium and high workload.  
 %%    Evaluate power spectral density differences at each electrode. 
-    % 'Continuous' dataset is actually sampled from different time points, so oscillations being examined get interupted.
+    % The 'Continuous' dataset is actually sampled from different time points and have breaks in between. So oscillations being examined get interupted at the end of each epoch.
     %
-    % Therefore: 
+    % Therefore I must: 
     %
     % * 1) import epoched data. 
     %
